@@ -15,7 +15,10 @@ const MONGODB_URI = process.env.MONGODB_URI;
 
 if (!MONGODB_URI) {
   console.error("❌ ERROR: MONGODB_URI no está definida");
-  process.exit(1);
+  // CAMBIO 1: No salir si estamos en test
+  if (process.env.NODE_ENV !== 'test') {
+    process.exit(1);
+  }
 }
 
 let db;
@@ -34,7 +37,11 @@ async function connectDB() {
     console.log(`✅ Conectado a MongoDB Atlas - Base de datos: ${dbName}`);
   } catch (error) {
     console.error("❌ Error conectando a MongoDB:", error);
-    process.exit(1);
+    // CAMBIO 2: No salir si estamos en test
+    if (process.env.NODE_ENV !== 'test') {
+      process.exit(1);
+    }
+    throw error; // Lanzar el error para que Jest lo capture
   }
 }
 
@@ -387,11 +394,15 @@ async function initializeApp() {
       });
     }
   } catch (err) {
-    console.error("❌ No se pudo iniciar el servidor:", err);
-    process.exit(1);
+    console.error("❌ No se pudo inicializar el servidor:", err);
+    if (process.env.NODE_ENV !== 'test') {
+      process.exit(1);
+    }
+    throw err;
   }
 }
 
+// CAMBIO 3: Solo auto-inicializar en producción
 if (process.env.NODE_ENV !== 'test') {
   initializeApp();
 }
