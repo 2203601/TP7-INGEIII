@@ -16,7 +16,7 @@ variables:
   - name: RESOURCE_GROUP_NAME
     value: 'TPS-INGE-2025'
   - name: azureServiceConnection
-    value: 'azure-tp05-connection'
+    value: 'azure-tp07-connection'
   - name: backendAppNameQA
     value: 'Coffeehub-Back-QA'
   - name: frontendAppNameQA
