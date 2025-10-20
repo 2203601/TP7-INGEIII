@@ -1,30 +1,27 @@
 import { describe, it, expect, beforeAll, afterAll } from '@jest/globals';
 import request from 'supertest';
-import app, { initializeApp, server, mongoClient } from '../../server.js';
+import app, { initializeApp, mongoClient } from '../../server.js';
 
 describe('🧪 Tests Unitarios - CoffeeHub API', () => {
   
-  // ⚠️ IMPORTANTE: Esperar a que MongoDB se conecte antes de los tests
   beforeAll(async () => {
-    await initializeApp();
-  });
-
-  // ⚠️ IMPORTANTE: Cerrar conexiones después de los tests
-  afterAll(async () => {
-    // Cerrar conexión de MongoDB
-    if (mongoClient) {
-      await mongoClient.close();
-      console.log('✅ Conexión de MongoDB cerrada');
+    try {
+      await initializeApp();
+      console.log('✅ Inicialización completada para tests');
+    } catch (error) {
+      console.error('❌ Error en beforeAll:', error.message);
+      throw error;
     }
-    
-    // Cerrar servidor si está corriendo
-    if (server) {
-      await new Promise((resolve) => {
-        server.close(() => {
-          console.log('✅ Servidor cerrado');
-          resolve();
-        });
-      });
+  }, 60000);
+
+  afterAll(async () => {
+    try {
+      if (mongoClient) {
+        await mongoClient.close();
+        console.log('✅ Conexión de MongoDB cerrada');
+      }
+    } catch (error) {
+      console.error('⚠️ Error cerrando MongoDB:', error.message);
     }
   });
 
