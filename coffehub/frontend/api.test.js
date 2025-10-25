@@ -63,7 +63,7 @@ describe('CoffeeHub Frontend - Tests Adicionales', () => {
     });
 
     test('debe retornar QA URL cuando hostname incluye qa', () => {
-      window.location.hostname = 'coffeehub-qa.azurewebsites.net';
+      window.location.hostname = 'coffeehub-front-qa.azurewebsites.net';
       expect(appModule.getBackendURL()).toBe('https://coffeehub-back-qa-argeftdrb3dkb9du.brazilsouth-01.azurewebsites.net');
     });
 
