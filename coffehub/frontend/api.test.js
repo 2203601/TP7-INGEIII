@@ -22,6 +22,7 @@ beforeEach(() => {
       <button id="cancel-btn"></button>
       <h2 id="form-title"></h2>
     </form>
+    <div id="add-form" style="display: none;"></div>
     <div id="coffee-grid"></div>
     <span id="total-coffees"></span>
     <span id="avg-price"></span>
@@ -32,8 +33,13 @@ beforeEach(() => {
   delete window.location;
   window.location = { hostname: 'localhost' };
   
-  // Mock de fetch
-  global.fetch = jest.fn();
+  // Mock de fetch con .json() implementado
+  global.fetch = jest.fn(() => 
+    Promise.resolve({
+      ok: true,
+      json: () => Promise.resolve([])
+    })
+  );
   
   // Mock de confirm y alert
   global.confirm = jest.fn();
@@ -49,11 +55,11 @@ afterEach(() => {
 // -----------------------------
 describe('CoffeeHub Frontend - Tests Adicionales', () => {
 
-  // Tests para getBackendURL() - Cobertura: 0% → 100%
+  // Tests para getBackendURL()
   describe('getBackendURL()', () => {
     test('debe retornar localhost URL cuando hostname incluye localhost', () => {
       window.location.hostname = 'localhost';
-      expect(appModule.getBackendURL()).toBe('http://localhost:3000');
+      expect(appModule.getBackendURL()).toBe('http://localhost:4000');
     });
 
     test('debe retornar QA URL cuando hostname incluye qa', () => {
@@ -72,7 +78,7 @@ describe('CoffeeHub Frontend - Tests Adicionales', () => {
     });
   });
 
-  // Tests para deleteCoffee() - Cobertura: 0% → 100%
+  // Tests para deleteCoffee()
   describe('deleteCoffee()', () => {
     test('debe cancelar eliminación si el usuario no confirma', async () => {
       global.confirm.mockReturnValue(false);
@@ -86,13 +92,16 @@ describe('CoffeeHub Frontend - Tests Adicionales', () => {
 
     test('debe eliminar café exitosamente cuando se confirma', async () => {
       global.confirm.mockReturnValue(true);
-      global.fetch.mockResolvedValue({ ok: true });
+      global.fetch.mockResolvedValue({ 
+        ok: true,
+        json: () => Promise.resolve([])
+      });
       const mockAlert = jest.fn();
       
       await appModule.deleteCoffee('123', 'Café Test', mockAlert);
       
       expect(global.fetch).toHaveBeenCalledWith(
-        expect.stringContaining('/coffees/123'),
+        expect.stringContaining('/api/products/123'),
         { method: 'DELETE' }
       );
       expect(mockAlert).toHaveBeenCalledWith('✅ Café eliminado exitosamente!');
@@ -134,7 +143,7 @@ describe('CoffeeHub Frontend - Tests Adicionales', () => {
     });
   });
 
-  // Tests para handleFormSubmit() - Cobertura: 0% → 100%
+  // Tests para handleFormSubmit()
   describe('handleFormSubmit()', () => {
     beforeEach(() => {
       document.getElementById('name').value = 'Café Nuevo';
@@ -147,12 +156,15 @@ describe('CoffeeHub Frontend - Tests Adicionales', () => {
     });
 
     test('debe enviar datos del formulario correctamente', async () => {
-      global.fetch.mockResolvedValue({ ok: true });
+      global.fetch.mockResolvedValue({ 
+        ok: true,
+        json: () => Promise.resolve([])
+      });
       
       await appModule.handleFormSubmit();
       
       expect(global.fetch).toHaveBeenCalledWith(
-        expect.stringContaining('/coffees'),
+        expect.stringContaining('/api/products'),
         expect.objectContaining({
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -163,13 +175,15 @@ describe('CoffeeHub Frontend - Tests Adicionales', () => {
     });
 
     test('debe limpiar formulario después de envío exitoso', async () => {
-      global.fetch.mockResolvedValue({ ok: true });
+      global.fetch.mockResolvedValue({ 
+        ok: true,
+        json: () => Promise.resolve([])
+      });
       
       await appModule.handleFormSubmit();
       
-      // Verificar que el formulario fue reseteado (cancelEdit fue llamado)
       expect(document.getElementById('form-title').textContent).toBe('Agregar Nuevo Café');
-      expect(document.getElementById('submit-btn').innerHTML).toBe('Agregar Café');
+      expect(document.getElementById('submit-btn').innerHTML).toBe('✅ Agregar Café');
     });
 
     test('debe manejar error de red al enviar', async () => {
@@ -179,11 +193,11 @@ describe('CoffeeHub Frontend - Tests Adicionales', () => {
       await appModule.handleFormSubmit();
       
       expect(consoleError).toHaveBeenCalledWith(
-        '❌ Error al agregar café:',
+        '❌ Error al guardar café:',
         expect.any(Error)
       );
       expect(global.alert).toHaveBeenCalledWith(
-        expect.stringContaining('⚠️ Error al agregar café')
+        expect.stringContaining('⚠️ Error al guardar café')
       );
       
       consoleError.mockRestore();
@@ -197,14 +211,17 @@ describe('CoffeeHub Frontend - Tests Adicionales', () => {
       
       expect(consoleError).toHaveBeenCalled();
       expect(global.alert).toHaveBeenCalledWith(
-        expect.stringContaining('⚠️ Error al agregar café')
+        expect.stringContaining('⚠️ Error al guardar café')
       );
       
       consoleError.mockRestore();
     });
 
     test('debe incluir todos los campos del café en el request', async () => {
-      global.fetch.mockResolvedValue({ ok: true });
+      global.fetch.mockResolvedValue({ 
+        ok: true,
+        json: () => Promise.resolve([])
+      });
       
       await appModule.handleFormSubmit();
       
@@ -215,77 +232,97 @@ describe('CoffeeHub Frontend - Tests Adicionales', () => {
         name: 'Café Nuevo',
         origin: 'Colombia',
         type: 'Arábica',
-        price: '15',
-        rating: '4',
+        price: 15,
+        rating: 4,
         roast: 'Medium',
         description: 'Excelente café'
       });
     });
   });
 
-  // Tests para updateStats() - Mejora cobertura de branches
+  // Tests para updateStats()
   describe('updateStats() - casos edge', () => {
     test('debe manejar cuando los elementos no existen', async () => {
-      document.body.innerHTML = '<div></div>'; // DOM sin elementos necesarios
+      document.body.innerHTML = '<div></div>';
       
-      // No debería lanzar error aunque los elementos no existan
-      await expect(appModule.updateStats({ total: 5 })).resolves.not.toThrow();
+      await expect(appModule.updateStats()).resolves.not.toThrow();
     });
 
     test('debe manejar valores null en estadísticas', async () => {
-      await appModule.updateStats({ total: null, avgPrice: null, popularOrigin: null });
+      global.fetch.mockResolvedValue({
+        ok: true,
+        json: () => Promise.resolve({ total: null, avgPrice: null, popularOrigin: null })
+      });
+
+      await appModule.updateStats();
       
       expect(document.getElementById('total-coffees').textContent).toBe('0');
-      expect(document.getElementById('avg-price').textContent).toBe('$0');
+      expect(document.getElementById('avg-price').textContent).toBe('$0.00');
       expect(document.getElementById('popular-origin').textContent).toBe('N/A');
     });
 
     test('debe usar valores por defecto cuando stats es undefined', async () => {
+      global.fetch.mockResolvedValue({
+        ok: false
+      });
+
       await appModule.updateStats();
       
       expect(document.getElementById('total-coffees').textContent).toBe('0');
-      expect(document.getElementById('avg-price').textContent).toBe('$0');
+      expect(document.getElementById('avg-price').textContent).toBe('$0.00');
       expect(document.getElementById('popular-origin').textContent).toBe('N/A');
     });
 
     test('debe formatear correctamente el precio con decimales', async () => {
-      await appModule.updateStats({ total: 5, avgPrice: 14.99, popularOrigin: 'Brasil' });
+      global.fetch.mockResolvedValue({
+        ok: true,
+        json: () => Promise.resolve({ total: 5, avgPrice: '14.99', popularOrigin: 'Brasil' })
+      });
+
+      await appModule.updateStats();
       
       expect(document.getElementById('avg-price').textContent).toBe('$14.99');
     });
   });
 
-  // Tests para init() - Cobertura: 0% → 100%
+  // Tests para init()
   describe('init()', () => {
-    test('debe ejecutarse sin errores', () => {
-      // Verificamos que los elementos existen para updateStats
-      expect(document.getElementById('total-coffees')).toBeTruthy();
-      expect(document.getElementById('avg-price')).toBeTruthy();
-      expect(document.getElementById('popular-origin')).toBeTruthy();
-      
-      // Ejecutamos init y verificamos que no lanza errores
+    test('debe ejecutarse sin errores', async () => {
+      global.fetch.mockResolvedValue({
+        ok: true,
+        json: () => Promise.resolve([])
+      });
+
       expect(() => appModule.init()).not.toThrow();
       
-      // Verificamos que las estadísticas se inicializan con valores por defecto
+      // Esperar a que las promesas se resuelvan
+      await new Promise(resolve => setTimeout(resolve, 0));
+      
       expect(document.getElementById('total-coffees').textContent).toBe('0');
     });
 
-    test('debe inicializar estadísticas correctamente', () => {
-      // Limpiamos valores previos
+    test('debe inicializar estadísticas correctamente', async () => {
+      global.fetch.mockResolvedValue({
+        ok: true,
+        json: () => Promise.resolve([])
+      });
+
       document.getElementById('total-coffees').textContent = '';
       document.getElementById('avg-price').textContent = '';
       document.getElementById('popular-origin').textContent = '';
       
       appModule.init();
       
-      // Después de init(), las estadísticas deben tener valores por defecto
+      // Esperar a que las promesas se resuelvan
+      await new Promise(resolve => setTimeout(resolve, 0));
+      
       expect(document.getElementById('total-coffees').textContent).toBe('0');
-      expect(document.getElementById('avg-price').textContent).toBe('$0');
+      expect(document.getElementById('avg-price').textContent).toBe('$0.00');
       expect(document.getElementById('popular-origin').textContent).toBe('N/A');
     });
   });
 
-  // Tests adicionales para toggleForm() - casos edge
+  // Tests para toggleForm()
   describe('toggleForm() - casos edge', () => {
     test('debe manejar cuando el formulario no existe', () => {
       document.body.innerHTML = '';
@@ -294,7 +331,7 @@ describe('CoffeeHub Frontend - Tests Adicionales', () => {
     });
 
     test('debe mostrar formulario cuando display está vacío', () => {
-      const form = document.getElementById('coffee-form');
+      const form = document.getElementById('add-form');
       form.style.display = '';
       
       appModule.toggleForm();
@@ -303,7 +340,7 @@ describe('CoffeeHub Frontend - Tests Adicionales', () => {
     });
   });
 
-  // Tests adicionales para cancelEdit() - casos edge
+  // Tests para cancelEdit()
   describe('cancelEdit() - casos edge', () => {
     test('debe manejar cuando el formulario no existe', () => {
       document.body.innerHTML = '';
@@ -319,17 +356,17 @@ describe('CoffeeHub Frontend - Tests Adicionales', () => {
     });
   });
 
-  // Tests adicionales para editCoffee() - casos edge
+  // Tests para editCoffee()
   describe('editCoffee() - casos edge', () => {
     test('debe manejar cuando el formulario no existe', () => {
       document.body.innerHTML = '';
       
-      expect(() => appModule.editCoffee({ id: '1', name: 'Test' })).not.toThrow();
+      expect(() => appModule.editCoffee({ _id: '1', name: 'Test' })).not.toThrow();
     });
 
     test('debe manejar café con todos los campos null', () => {
       appModule.editCoffee({
-        id: '1',
+        _id: '1',
         name: null,
         origin: null,
         type: null,
@@ -350,7 +387,7 @@ describe('CoffeeHub Frontend - Tests Adicionales', () => {
 
     test('debe establecer correctamente el ID de edición', () => {
       const coffee = {
-        id: '456',
+        _id: '456',
         name: 'Café Test',
         origin: 'Colombia',
         type: 'Arábica',
@@ -366,7 +403,7 @@ describe('CoffeeHub Frontend - Tests Adicionales', () => {
     });
   });
 
-  // Tests adicionales para renderCoffees() - casos edge
+  // Tests para renderCoffees()
   describe('renderCoffees() - casos edge', () => {
     test('debe manejar cuando el grid no existe', () => {
       document.body.innerHTML = '';
@@ -385,7 +422,7 @@ describe('CoffeeHub Frontend - Tests Adicionales', () => {
       const grid = document.getElementById('coffee-grid');
       grid.innerHTML = '<div>Contenido anterior</div>';
       
-      appModule.renderCoffees([{ name: 'Nuevo Café' }]);
+      appModule.renderCoffees([{ name: 'Nuevo Café', _id: '1' }]);
       
       expect(grid.textContent).not.toContain('Contenido anterior');
       expect(grid.textContent).toContain('Nuevo Café');
@@ -393,9 +430,9 @@ describe('CoffeeHub Frontend - Tests Adicionales', () => {
 
     test('debe renderizar múltiples cafés correctamente', () => {
       const coffees = [
-        { name: 'Café 1' },
-        { name: 'Café 2' },
-        { name: 'Café 3' }
+        { name: 'Café 1', _id: '1' },
+        { name: 'Café 2', _id: '2' },
+        { name: 'Café 3', _id: '3' }
       ];
       
       appModule.renderCoffees(coffees);
