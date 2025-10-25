@@ -1,87 +1,97 @@
 // ☕ CoffeeHub Frontend - API URL DINÁMICA
 // 🔧 Detectar automáticamente la URL del backend según el ambiente
 
-function getBackendURL() {
-  // 1. Si estamos en localhost, usar backend local
-  if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+// ================================
+// 📦 FUNCIONES EXPORTABLES
+// ================================
+
+export function getBackendURL() {
+  // Usar global.window para compatibilidad con tests
+  const win = typeof window !== 'undefined' ? window : global.window;
+  const hostname = win?.location?.hostname || 'localhost';
+  
+  if (hostname === 'localhost' || hostname === '127.0.0.1') {
     return 'http://localhost:4000';
   }
   
-  // 2. Si estamos en QA, usar backend de QA
-  if (window.location.hostname.includes('coffeehub-front-qa')) {
+  if (hostname.includes('coffeehub-front-qa')) {
     return 'https://coffeehub-back-qa-argeftdrb3dkb9du.brazilsouth-01.azurewebsites.net';
   }
   
-  // 3. Si estamos en PROD, usar backend de PROD
-  if (window.location.hostname.includes('coffeehub-front-prod')) {
+  if (hostname.includes('coffeehub-front-prod')) {
     return 'https://coffeehub-back-prod-bzgaa5ekbed7fret.brazilsouth-01.azurewebsites.net';
   }
   
-  // 4. Fallback por defecto (QA)
   return 'https://coffeehub-back-qa-argeftdrb3dkb9du.brazilsouth-01.azurewebsites.net';
 }
-
-const API_URL = getBackendURL();
-console.log('🔗 API URL configurada:', API_URL);
-console.log('🌐 Hostname actual:', window.location.hostname);
 
 // Variable global para tracking de edición
 let editingCoffeeId = null;
 
-// Toggle del formulario
-function toggleForm() {
-  const form = document.getElementById("add-form");
-  const isHidden = form.style.display === "none";
+export function getEditingCoffeeId() {
+  return editingCoffeeId;
+}
+
+export function setEditingCoffeeId(id) {
+  editingCoffeeId = id;
+}
+
+export function toggleForm() {
+  const doc = typeof document !== 'undefined' ? document : global.document;
+  const form = doc.getElementById("add-form");
+  const isHidden = form.style.display === "none" || form.style.display === "";
   form.style.display = isHidden ? "block" : "none";
   
-  // Si se cierra el formulario, cancelar edición
   if (!isHidden) {
     cancelEdit();
   }
 }
 
-// Cancelar edición
-function cancelEdit() {
+export function cancelEdit() {
+  const doc = typeof document !== 'undefined' ? document : global.document;
   editingCoffeeId = null;
-  document.getElementById("coffee-form").reset();
-  document.getElementById("form-title").textContent = "Agregar Nuevo Café";
-  document.getElementById("submit-btn").innerHTML = "✅ Agregar Café";
-  document.getElementById("cancel-btn").style.display = "none";
+  doc.getElementById("coffee-form").reset();
+  doc.getElementById("form-title").textContent = "Agregar Nuevo Café";
+  doc.getElementById("submit-btn").innerHTML = "✅ Agregar Café";
+  doc.getElementById("cancel-btn").style.display = "none";
+  doc.getElementById("add-form").style.display = "none";
 }
 
-// Preparar formulario para editar
-function editCoffee(coffee) {
+export function editCoffee(coffee) {
+  const doc = typeof document !== 'undefined' ? document : global.document;
   editingCoffeeId = coffee._id;
   
-  // Llenar formulario con datos existentes
-  document.getElementById("name").value = coffee.name;
-  document.getElementById("origin").value = coffee.origin;
-  document.getElementById("type").value = coffee.type;
-  document.getElementById("price").value = coffee.price;
-  document.getElementById("roast").value = coffee.roast;
-  document.getElementById("rating").value = coffee.rating;
-  document.getElementById("description").value = coffee.description;
+  doc.getElementById("name").value = coffee.name;
+  doc.getElementById("origin").value = coffee.origin;
+  doc.getElementById("type").value = coffee.type;
+  doc.getElementById("price").value = coffee.price;
+  doc.getElementById("roast").value = coffee.roast;
+  doc.getElementById("rating").value = coffee.rating;
+  doc.getElementById("description").value = coffee.description || '';
   
-  // Cambiar título y botón
-  document.getElementById("form-title").textContent = "Editar Café";
-  document.getElementById("submit-btn").innerHTML = "💾 Guardar Cambios";
-  document.getElementById("cancel-btn").style.display = "inline-block";
+  doc.getElementById("form-title").textContent = "Editar Café";
+  doc.getElementById("submit-btn").innerHTML = "💾 Guardar Cambios";
+  doc.getElementById("cancel-btn").style.display = "inline-block";
+  doc.getElementById("add-form").style.display = "block";
   
-  // Mostrar formulario
-  document.getElementById("add-form").style.display = "block";
-  
-  // Scroll hacia el formulario
-  document.getElementById("add-form").scrollIntoView({ behavior: 'smooth' });
+  // Solo hacer scroll en el browser real
+  if (typeof document !== 'undefined' && doc.getElementById("add-form").scrollIntoView) {
+    doc.getElementById("add-form").scrollIntoView({ behavior: 'smooth' });
+  }
 }
 
-// Eliminar café
-async function deleteCoffee(id, name) {
-  if (!confirm(`¿Estás seguro de eliminar "${name}"?`)) {
+export async function deleteCoffee(id, name) {
+  const win = typeof window !== 'undefined' ? window : global.window;
+  const fetchFn = typeof fetch !== 'undefined' ? fetch : global.fetch;
+  const confirmFn = typeof confirm !== 'undefined' ? confirm : global.confirm;
+  const alertFn = typeof alert !== 'undefined' ? alert : global.alert;
+  
+  if (!confirmFn(`¿Estás seguro de eliminar "${name}"?`)) {
     return;
   }
   
   try {
-    const response = await fetch(`${API_URL}/api/products/${id}`, {
+    const response = await fetchFn(`${getBackendURL()}/api/products/${id}`, {
       method: "DELETE"
     });
     
@@ -91,93 +101,93 @@ async function deleteCoffee(id, name) {
     
     await renderCoffees();
     await updateStats();
-    alert('✅ Café eliminado exitosamente!');
+    alertFn('✅ Café eliminado exitosamente!');
   } catch (error) {
     console.error('❌ Error al eliminar café:', error);
-    alert(`⚠️ Error al eliminar café: ${error.message}`);
+    alertFn(`⚠️ Error al eliminar café: ${error.message}`);
   }
 }
 
-// Renderizar cafés
-async function renderCoffees() {
+export async function renderCoffees() {
+  const doc = typeof document !== 'undefined' ? document : global.document;
+  const fetchFn = typeof fetch !== 'undefined' ? fetch : global.fetch;
+  const grid = doc.getElementById("coffee-grid");
+  
   try {
-    const res = await fetch(`${API_URL}/api/products`);
+    const res = await fetchFn(`${getBackendURL()}/api/products`);
     if (!res.ok) {
-      throw new Error(`HTTP error! status: ${res.status}`);
+      grid.innerHTML = '<p class="error">❌ Error al conectar con el servidor</p>';
+      return;
     }
     const coffees = await res.json();
-    const grid = document.getElementById("coffee-grid");
     
     if (coffees.length === 0) {
-      grid.innerHTML = '<div class="no-results">No hay cafés registrados</div>';
+      grid.innerHTML = '<p class="no-data">No hay cafés registrados. ¡Agrega uno!</p>';
       return;
     }
     
     grid.innerHTML = coffees.map(c => `
       <div class="coffee-card">
-        <h3 class="coffee-name">${c.name}</h3>
-        <div class="coffee-details">
-          <div><b>Origen:</b> ${c.origin}</div>
-          <div><b>Precio:</b> $${c.price}/lb</div>
-          <div><b>Tipo:</b> ${c.type}</div>
-          <div><b>Tostado:</b> ${c.roast}</div>
-          <div><b>Calificación:</b> ⭐ ${c.rating}/5</div>
-        </div>
-        <p class="coffee-description">${c.description}</p>
+        <h3>${c.name}</h3>
+        <p><strong>Origen:</strong> ${c.origin}</p>
+        <p><strong>Tipo:</strong> ${c.type}</p>
+        <p><strong>Precio:</strong> $${c.price}</p>
+        <p><strong>Tostado:</strong> ${c.roast}</p>
+        <p><strong>Rating:</strong> ${c.rating} ⭐</p>
+        <p>${c.description || 'Sin descripción'}</p>
         <div class="card-actions">
-          <button onclick='editCoffee(${JSON.stringify(c).replace(/'/g, "&apos;")})' class="btn-edit">
-            ✏️ Editar
-          </button>
-          <button onclick="deleteCoffee('${c._id}', '${c.name.replace(/'/g, "\\'")}')" class="btn-delete">
-            🗑️ Eliminar
-          </button>
+          <button onclick='editCoffee(${JSON.stringify(c).replace(/'/g, "&#39;")})'>✏️ Editar</button>
+          <button onclick='deleteCoffee("${c._id}", "${c.name}")'>🗑️ Eliminar</button>
         </div>
       </div>
     `).join("");
   } catch (error) {
     console.error('❌ Error al cargar cafés:', error);
-    document.getElementById("coffee-grid").innerHTML =
-      `<div class="error">⚠️ Error al conectar con el servidor: ${error.message}</div>`;
+    grid.innerHTML = '<p class="error">❌ Error al conectar con el servidor</p>';
   }
 }
 
-// Actualizar estadísticas
-async function updateStats() {
+export async function updateStats() {
+  const doc = typeof document !== 'undefined' ? document : global.document;
+  const fetchFn = typeof fetch !== 'undefined' ? fetch : global.fetch;
+  
   try {
-    const res = await fetch(`${API_URL}/api/stats`);
+    const res = await fetchFn(`${getBackendURL()}/api/stats`);
     if (!res.ok) {
-      throw new Error(`HTTP error! status: ${res.status}`);
+      return;
     }
     const stats = await res.json();
     
-    document.getElementById("total-coffees").textContent = stats.total || 0;
-    document.getElementById("avg-price").textContent = `$${stats.avgPrice || 0}`;
-    document.getElementById("popular-origin").textContent = stats.popularOrigin || "N/A";
+    doc.getElementById("total-coffees").textContent = stats.total || 0;
+    doc.getElementById("avg-price").textContent = `$${stats.avgPrice || 0}`;
+    doc.getElementById("popular-origin").textContent = stats.popularOrigin || "N/A";
   } catch (error) {
     console.error('❌ Error al cargar estadísticas:', error);
   }
 }
 
-// Manejar envío de formulario (crear o actualizar)
-document.getElementById("coffee-form").addEventListener("submit", async (e) => {
+export async function handleFormSubmit(e) {
+  const doc = typeof document !== 'undefined' ? document : global.document;
+  const fetchFn = typeof fetch !== 'undefined' ? fetch : global.fetch;
+  const alertFn = typeof alert !== 'undefined' ? alert : global.alert;
+  
   e.preventDefault();
   
   const coffee = {
-    name: document.getElementById("name").value,
-    origin: document.getElementById("origin").value,
-    type: document.getElementById("type").value,
-    price: parseFloat(document.getElementById("price").value),
-    roast: document.getElementById("roast").value,
-    rating: parseFloat(document.getElementById("rating").value),
-    description: document.getElementById("description").value || "Sin descripción"
+    name: doc.getElementById("name").value,
+    origin: doc.getElementById("origin").value,
+    type: doc.getElementById("type").value,
+    price: parseFloat(doc.getElementById("price").value),
+    roast: doc.getElementById("roast").value,
+    rating: parseFloat(doc.getElementById("rating").value),
+    description: doc.getElementById("description").value || "Sin descripción"
   };
   
   try {
     let response;
     
     if (editingCoffeeId) {
-      // Actualizar café existente
-      response = await fetch(`${API_URL}/api/products/${editingCoffeeId}`, {
+      response = await fetchFn(`${getBackendURL()}/api/products/${editingCoffeeId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(coffee)
@@ -187,10 +197,9 @@ document.getElementById("coffee-form").addEventListener("submit", async (e) => {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       
-      alert('✅ Café actualizado exitosamente!');
+      alertFn('✅ Café actualizado!');
     } else {
-      // Crear nuevo café
-      response = await fetch(`${API_URL}/api/products`, {
+      response = await fetchFn(`${getBackendURL()}/api/products`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(coffee)
@@ -200,29 +209,37 @@ document.getElementById("coffee-form").addEventListener("submit", async (e) => {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       
-      alert('✅ Café agregado exitosamente!');
+      alertFn('✅ Café agregado!');
     }
     
     cancelEdit();
-    toggleForm();
     await renderCoffees();
     await updateStats();
   } catch (error) {
     console.error('❌ Error al guardar café:', error);
-    alert(`⚠️ Error al guardar café: ${error.message}`);
+    alertFn(`❌ Error al guardar el café`);
   }
-});
+}
 
-// Inicializar
-renderCoffees();
-updateStats();
+// ================================
+// 🌐 CÓDIGO QUE SOLO SE EJECUTA EN EL BROWSER
+// ================================
 
-export {
-  getBackendURL,
-  toggleForm,
-  cancelEdit,
-  editCoffee,
-  deleteCoffee,
-  renderCoffees,
-  updateStats
-};
+if (typeof window !== 'undefined') {
+  const API_URL = getBackendURL();
+  console.log('🔗 API URL configurada:', API_URL);
+  console.log('🌐 Hostname actual:', window.location.hostname);
+  
+  // Exponer funciones globalmente para onclick en HTML
+  window.toggleForm = toggleForm;
+  window.cancelEdit = cancelEdit;
+  window.editCoffee = editCoffee;
+  window.deleteCoffee = deleteCoffee;
+  
+  // Event listener del formulario
+  document.getElementById("coffee-form")?.addEventListener("submit", handleFormSubmit);
+  
+  // Inicializar
+  renderCoffees();
+  updateStats();
+}
