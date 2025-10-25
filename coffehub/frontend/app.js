@@ -216,3 +216,14 @@ document.getElementById("coffee-form").addEventListener("submit", async (e) => {
 // Inicializar
 renderCoffees();
 updateStats();
+
+export {
+  getBackendURL,
+  toggleForm,
+  cancelEdit,
+  editCoffee,
+  deleteCoffee,
+  renderCoffees,
+  updateStats,
+  handleFormSubmit
+};
