@@ -23,9 +23,9 @@ export function setEditingCoffeeId(id) {
 export function getBackendURL() {
   const hostname = window.location.hostname;
   if (hostname.includes('localhost')) return 'http://localhost:4000';
-  if (hostname.includes('qa')) return 'https://coffeehub-back-qa.azurewebsites.net';
+  if (hostname.includes('qa')) return 'https://coffeehub-back-qa-argeftdrb3dkb9du.brazilsouth-01.azurewebsites.net';
   if (hostname.includes('prod')) return 'https://coffeehub-back-prod.azurewebsites.net';
-  return 'https://coffeehub-back-qa.azurewebsites.net'; // fallback
+  return 'https://coffeehub-back-prod-bzgaa5ekbed7fret.brazilsouth-01.azurewebsites.net'; // fallback
 }
 
 // -----------------------------
