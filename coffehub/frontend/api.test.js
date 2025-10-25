@@ -64,17 +64,17 @@ describe('CoffeeHub Frontend - Tests Adicionales', () => {
 
     test('debe retornar QA URL cuando hostname incluye qa', () => {
       window.location.hostname = 'coffeehub-qa.azurewebsites.net';
-      expect(appModule.getBackendURL()).toBe('https://coffeehub-back-qa.azurewebsites.net');
+      expect(appModule.getBackendURL()).toBe('https://coffeehub-back-qa-argeftdrb3dkb9du.brazilsouth-01.azurewebsites.net');
     });
 
     test('debe retornar PROD URL cuando hostname incluye prod', () => {
       window.location.hostname = 'coffeehub-prod.azurewebsites.net';
-      expect(appModule.getBackendURL()).toBe('https://coffeehub-back-prod.azurewebsites.net');
+      expect(appModule.getBackendURL()).toBe('https://coffeehub-back-prod-bzgaa5ekbed7fret.brazilsouth-01.azurewebsites.net');
     });
 
     test('debe retornar QA URL como fallback para otros hostnames', () => {
       window.location.hostname = 'example.com';
-      expect(appModule.getBackendURL()).toBe('https://coffeehub-back-qa.azurewebsites.net');
+      expect(appModule.getBackendURL()).toBe('https://coffeehub-back-qa-argeftdrb3dkb9du.brazilsouth-01.azurewebsites.net');
     });
   });
 
