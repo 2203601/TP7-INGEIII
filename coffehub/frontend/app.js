@@ -224,6 +224,5 @@ export {
   editCoffee,
   deleteCoffee,
   renderCoffees,
-  updateStats,
-  handleFormSubmit
+  updateStats
 };

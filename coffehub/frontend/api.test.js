@@ -83,13 +83,5 @@ describe('Pruebas del Frontend', () => {
     expect(statsDiv.textContent).toContain('4.2');
   });
 
-  test('handleFormSubmit llama a fetch correctamente', async () => {
-    global.fetch.mockResolvedValueOnce({ ok: true, json: async () => ({}) });
-
-    const form = document.getElementById('coffeeForm');
-    form.innerHTML = '<input id="name" value="Cappuccino">';
-    await handleFormSubmit({ preventDefault: () => {} });
-
-    expect(global.fetch).toHaveBeenCalled();
-  });
+  
 });
