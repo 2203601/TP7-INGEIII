@@ -83,7 +83,7 @@ stages:
           cliProjectKey: 'lucianahueda13_TP7-INGEIII.git'                 # clave del proyecto SonarCloud
           cliProjectName: 'TP7-INGEIII'
           extraProperties: |
-            sonar.sources=coffehub/backend/src
+            sonar.sources=coffehub/backend
             sonar.tests=coffehub/backend/tests
             sonar.javascript.lcov.reportPaths=coffehub/backend/coverage/lcov.info
             sonar.exclusions=**/node_modules/**,**/*.test.js
