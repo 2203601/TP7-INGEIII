@@ -1,45 +1,239 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="jest tests" tests="20" failures="0" errors="0" time="2.248">
-  <testsuite name="🎯 Tests para Líneas Sin Cobertura" errors="0" failures="0" skipped="0" timestamp="2025-10-25T17:26:43" time="2.215" tests="20">
-    <testcase classname="🎯 Tests para Líneas Sin Cobertura GET /api/products/:id - Líneas 230-236 ✅ Debe obtener producto por ID (línea 230-236)" name="🎯 Tests para Líneas Sin Cobertura GET /api/products/:id - Líneas 230-236 ✅ Debe obtener producto por ID (línea 230-236)" time="0.141">
+<testsuites name="jest tests" tests="113" failures="0" errors="0" time="4.692">
+  <testsuite name="🎯 Tests para Líneas Sin Cobertura" errors="0" failures="0" skipped="0" timestamp="2025-11-09T22:48:45" time="3.046" tests="20">
+    <testcase classname="🎯 Tests para Líneas Sin Cobertura GET /api/products/:id - Líneas 230-236 ✅ Debe obtener producto por ID (línea 230-236)" name="🎯 Tests para Líneas Sin Cobertura GET /api/products/:id - Líneas 230-236 ✅ Debe obtener producto por ID (línea 230-236)" time="0.177">
     </testcase>
-    <testcase classname="🎯 Tests para Líneas Sin Cobertura GET /api/products/:id - Líneas 230-236 ❌ Debe retornar 404 (línea 232-233)" name="🎯 Tests para Líneas Sin Cobertura GET /api/products/:id - Líneas 230-236 ❌ Debe retornar 404 (línea 232-233)" time="0.053">
+    <testcase classname="🎯 Tests para Líneas Sin Cobertura GET /api/products/:id - Líneas 230-236 ❌ Debe retornar 404 (línea 232-233)" name="🎯 Tests para Líneas Sin Cobertura GET /api/products/:id - Líneas 230-236 ❌ Debe retornar 404 (línea 232-233)" time="0.058">
     </testcase>
-    <testcase classname="🎯 Tests para Líneas Sin Cobertura PUT /api/products/:id - Líneas 283-321 ✅ Debe actualizar producto (líneas 291-321)" name="🎯 Tests para Líneas Sin Cobertura PUT /api/products/:id - Líneas 283-321 ✅ Debe actualizar producto (líneas 291-321)" time="0.116">
+    <testcase classname="🎯 Tests para Líneas Sin Cobertura PUT /api/products/:id - Líneas 283-321 ✅ Debe actualizar producto (líneas 291-321)" name="🎯 Tests para Líneas Sin Cobertura PUT /api/products/:id - Líneas 283-321 ✅ Debe actualizar producto (líneas 291-321)" time="0.131">
     </testcase>
     <testcase classname="🎯 Tests para Líneas Sin Cobertura PUT /api/products/:id - Líneas 283-321 ❌ Debe rechazar ID inválido (línea 286-287)" name="🎯 Tests para Líneas Sin Cobertura PUT /api/products/:id - Líneas 283-321 ❌ Debe rechazar ID inválido (línea 286-287)" time="0.008">
     </testcase>
-    <testcase classname="🎯 Tests para Líneas Sin Cobertura PUT /api/products/:id - Líneas 283-321 ❌ Debe retornar 404 si no existe (línea 313-314)" name="🎯 Tests para Líneas Sin Cobertura PUT /api/products/:id - Líneas 283-321 ❌ Debe retornar 404 si no existe (línea 313-314)" time="0.055">
+    <testcase classname="🎯 Tests para Líneas Sin Cobertura PUT /api/products/:id - Líneas 283-321 ❌ Debe retornar 404 si no existe (línea 313-314)" name="🎯 Tests para Líneas Sin Cobertura PUT /api/products/:id - Líneas 283-321 ❌ Debe retornar 404 si no existe (línea 313-314)" time="0.057">
     </testcase>
-    <testcase classname="🎯 Tests para Líneas Sin Cobertura PUT /api/products/:id - Líneas 283-321 ❌ Debe validar precio negativo (línea 295-299)" name="🎯 Tests para Líneas Sin Cobertura PUT /api/products/:id - Líneas 283-321 ❌ Debe validar precio negativo (línea 295-299)" time="0.063">
+    <testcase classname="🎯 Tests para Líneas Sin Cobertura PUT /api/products/:id - Líneas 283-321 ❌ Debe validar precio negativo (línea 295-299)" name="🎯 Tests para Líneas Sin Cobertura PUT /api/products/:id - Líneas 283-321 ❌ Debe validar precio negativo (línea 295-299)" time="0.067">
     </testcase>
-    <testcase classname="🎯 Tests para Líneas Sin Cobertura DELETE /api/products/:id - Líneas 337-346 ✅ Debe eliminar producto (líneas 337-346)" name="🎯 Tests para Líneas Sin Cobertura DELETE /api/products/:id - Líneas 337-346 ✅ Debe eliminar producto (líneas 337-346)" time="0.114">
+    <testcase classname="🎯 Tests para Líneas Sin Cobertura DELETE /api/products/:id - Líneas 337-346 ✅ Debe eliminar producto (líneas 337-346)" name="🎯 Tests para Líneas Sin Cobertura DELETE /api/products/:id - Líneas 337-346 ✅ Debe eliminar producto (líneas 337-346)" time="0.12">
     </testcase>
-    <testcase classname="🎯 Tests para Líneas Sin Cobertura DELETE /api/products/:id - Líneas 337-346 ❌ Debe rechazar ID inválido (línea 333-334)" name="🎯 Tests para Líneas Sin Cobertura DELETE /api/products/:id - Líneas 337-346 ❌ Debe rechazar ID inválido (línea 333-334)" time="0.011">
+    <testcase classname="🎯 Tests para Líneas Sin Cobertura DELETE /api/products/:id - Líneas 337-346 ❌ Debe rechazar ID inválido (línea 333-334)" name="🎯 Tests para Líneas Sin Cobertura DELETE /api/products/:id - Líneas 337-346 ❌ Debe rechazar ID inválido (línea 333-334)" time="0.008">
     </testcase>
-    <testcase classname="🎯 Tests para Líneas Sin Cobertura DELETE /api/products/:id - Líneas 337-346 ❌ Debe retornar 404 si no existe (línea 339-340)" name="🎯 Tests para Líneas Sin Cobertura DELETE /api/products/:id - Líneas 337-346 ❌ Debe retornar 404 si no existe (línea 339-340)" time="0.054">
+    <testcase classname="🎯 Tests para Líneas Sin Cobertura DELETE /api/products/:id - Líneas 337-346 ❌ Debe retornar 404 si no existe (línea 339-340)" name="🎯 Tests para Líneas Sin Cobertura DELETE /api/products/:id - Líneas 337-346 ❌ Debe retornar 404 si no existe (línea 339-340)" time="0.061">
     </testcase>
-    <testcase classname="🎯 Tests para Líneas Sin Cobertura CORS - Líneas 185-186 ✅ Debe permitir origen válido (línea 182-183)" name="🎯 Tests para Líneas Sin Cobertura CORS - Líneas 185-186 ✅ Debe permitir origen válido (línea 182-183)" time="0.012">
+    <testcase classname="🎯 Tests para Líneas Sin Cobertura CORS - Líneas 185-186 ✅ Debe permitir origen válido (línea 182-183)" name="🎯 Tests para Líneas Sin Cobertura CORS - Líneas 185-186 ✅ Debe permitir origen válido (línea 182-183)" time="0.008">
     </testcase>
-    <testcase classname="🎯 Tests para Líneas Sin Cobertura CORS - Líneas 185-186 ✅ Debe permitir request sin origin (línea 181)" name="🎯 Tests para Líneas Sin Cobertura CORS - Líneas 185-186 ✅ Debe permitir request sin origin (línea 181)" time="0.003">
+    <testcase classname="🎯 Tests para Líneas Sin Cobertura CORS - Líneas 185-186 ✅ Debe permitir request sin origin (línea 181)" name="🎯 Tests para Líneas Sin Cobertura CORS - Líneas 185-186 ✅ Debe permitir request sin origin (línea 181)" time="0.006">
     </testcase>
-    <testcase classname="🎯 Tests para Líneas Sin Cobertura POST - Líneas 259-274 ✅ Debe crear producto con todos los campos (línea 259-274)" name="🎯 Tests para Líneas Sin Cobertura POST - Líneas 259-274 ✅ Debe crear producto con todos los campos (línea 259-274)" time="0.053">
+    <testcase classname="🎯 Tests para Líneas Sin Cobertura POST - Líneas 259-274 ✅ Debe crear producto con todos los campos (línea 259-274)" name="🎯 Tests para Líneas Sin Cobertura POST - Líneas 259-274 ✅ Debe crear producto con todos los campos (línea 259-274)" time="0.062">
     </testcase>
-    <testcase classname="🎯 Tests para Líneas Sin Cobertura POST - Líneas 259-274 ✅ Debe usar valores por defecto (línea 261-267)" name="🎯 Tests para Líneas Sin Cobertura POST - Líneas 259-274 ✅ Debe usar valores por defecto (línea 261-267)" time="0.056">
+    <testcase classname="🎯 Tests para Líneas Sin Cobertura POST - Líneas 259-274 ✅ Debe usar valores por defecto (línea 261-267)" name="🎯 Tests para Líneas Sin Cobertura POST - Líneas 259-274 ✅ Debe usar valores por defecto (línea 261-267)" time="0.065">
     </testcase>
-    <testcase classname="🎯 Tests para Líneas Sin Cobertura GET /api/stats - Líneas 355-374 ✅ Debe calcular estadísticas con productos (líneas 356-374)" name="🎯 Tests para Líneas Sin Cobertura GET /api/stats - Líneas 355-374 ✅ Debe calcular estadísticas con productos (líneas 356-374)" time="0.22">
+    <testcase classname="🎯 Tests para Líneas Sin Cobertura GET /api/stats - Líneas 355-374 ✅ Debe calcular estadísticas con productos (líneas 356-374)" name="🎯 Tests para Líneas Sin Cobertura GET /api/stats - Líneas 355-374 ✅ Debe calcular estadísticas con productos (líneas 356-374)" time="0.299">
     </testcase>
-    <testcase classname="🎯 Tests para Líneas Sin Cobertura GET /api/stats - Líneas 355-374 ✅ Debe manejar caso sin productos (línea 361)" name="🎯 Tests para Líneas Sin Cobertura GET /api/stats - Líneas 355-374 ✅ Debe manejar caso sin productos (línea 361)" time="0.066">
+    <testcase classname="🎯 Tests para Líneas Sin Cobertura GET /api/stats - Líneas 355-374 ✅ Debe manejar caso sin productos (línea 361)" name="🎯 Tests para Líneas Sin Cobertura GET /api/stats - Líneas 355-374 ✅ Debe manejar caso sin productos (línea 361)" time="0.236">
     </testcase>
-    <testcase classname="🎯 Tests para Líneas Sin Cobertura GET /api/stats - Líneas 355-374 ✅ Debe calcular popularOrigin correctamente (líneas 363-368)" name="🎯 Tests para Líneas Sin Cobertura GET /api/stats - Líneas 355-374 ✅ Debe calcular popularOrigin correctamente (líneas 363-368)" time="0.061">
+    <testcase classname="🎯 Tests para Líneas Sin Cobertura GET /api/stats - Líneas 355-374 ✅ Debe calcular popularOrigin correctamente (líneas 363-368)" name="🎯 Tests para Líneas Sin Cobertura GET /api/stats - Líneas 355-374 ✅ Debe calcular popularOrigin correctamente (líneas 363-368)" time="0.127">
     </testcase>
-    <testcase classname="🎯 Tests para Líneas Sin Cobertura Validaciones adicionales ❌ Debe validar rating NaN en actualización" name="🎯 Tests para Líneas Sin Cobertura Validaciones adicionales ❌ Debe validar rating NaN en actualización" time="0.063">
+    <testcase classname="🎯 Tests para Líneas Sin Cobertura Validaciones adicionales ❌ Debe validar rating NaN en actualización" name="🎯 Tests para Líneas Sin Cobertura Validaciones adicionales ❌ Debe validar rating NaN en actualización" time="0.062">
     </testcase>
-    <testcase classname="🎯 Tests para Líneas Sin Cobertura Validaciones adicionales ❌ Debe validar rating &lt; 0 en actualización" name="🎯 Tests para Líneas Sin Cobertura Validaciones adicionales ❌ Debe validar rating &lt; 0 en actualización" time="0.064">
+    <testcase classname="🎯 Tests para Líneas Sin Cobertura Validaciones adicionales ❌ Debe validar rating &lt; 0 en actualización" name="🎯 Tests para Líneas Sin Cobertura Validaciones adicionales ❌ Debe validar rating &lt; 0 en actualización" time="0.063">
     </testcase>
-    <testcase classname="🎯 Tests para Líneas Sin Cobertura Validaciones adicionales ❌ Debe validar rating &gt; 5 en actualización" name="🎯 Tests para Líneas Sin Cobertura Validaciones adicionales ❌ Debe validar rating &gt; 5 en actualización" time="0.059">
+    <testcase classname="🎯 Tests para Líneas Sin Cobertura Validaciones adicionales ❌ Debe validar rating &gt; 5 en actualización" name="🎯 Tests para Líneas Sin Cobertura Validaciones adicionales ❌ Debe validar rating &gt; 5 en actualización" time="0.062">
     </testcase>
-    <testcase classname="🎯 Tests para Líneas Sin Cobertura Validaciones adicionales ❌ Debe validar precio muy alto en actualización" name="🎯 Tests para Líneas Sin Cobertura Validaciones adicionales ❌ Debe validar precio muy alto en actualización" time="0.06">
+    <testcase classname="🎯 Tests para Líneas Sin Cobertura Validaciones adicionales ❌ Debe validar precio muy alto en actualización" name="🎯 Tests para Líneas Sin Cobertura Validaciones adicionales ❌ Debe validar precio muy alto en actualización" time="0.065">
+    </testcase>
+  </testsuite>
+  <testsuite name="🧪 Tests Unitarios - CoffeeHub API" errors="0" failures="0" skipped="0" timestamp="2025-11-09T22:48:48" time="1.454" tests="9">
+    <testcase classname="🧪 Tests Unitarios - CoffeeHub API GET /api/health ✅ Debe retornar estado OK del servidor" name="🧪 Tests Unitarios - CoffeeHub API GET /api/health ✅ Debe retornar estado OK del servidor" time="0.02">
+    </testcase>
+    <testcase classname="🧪 Tests Unitarios - CoffeeHub API GET /api/products ✅ Debe retornar un array de productos" name="🧪 Tests Unitarios - CoffeeHub API GET /api/products ✅ Debe retornar un array de productos" time="0.164">
+    </testcase>
+    <testcase classname="🧪 Tests Unitarios - CoffeeHub API GET /api/products ✅ Cada producto debe tener la estructura correcta" name="🧪 Tests Unitarios - CoffeeHub API GET /api/products ✅ Cada producto debe tener la estructura correcta" time="0.117">
+    </testcase>
+    <testcase classname="🧪 Tests Unitarios - CoffeeHub API POST /api/products ✅ Debe crear un nuevo producto" name="🧪 Tests Unitarios - CoffeeHub API POST /api/products ✅ Debe crear un nuevo producto" time="0.07">
+    </testcase>
+    <testcase classname="🧪 Tests Unitarios - CoffeeHub API POST /api/products ✅ Debe agregar descripción por defecto" name="🧪 Tests Unitarios - CoffeeHub API POST /api/products ✅ Debe agregar descripción por defecto" time="0.058">
+    </testcase>
+    <testcase classname="🧪 Tests Unitarios - CoffeeHub API POST /api/products ✅ Debe convertir precio string a número" name="🧪 Tests Unitarios - CoffeeHub API POST /api/products ✅ Debe convertir precio string a número" time="0.063">
+    </testcase>
+    <testcase classname="🧪 Tests Unitarios - CoffeeHub API GET /api/products/:id ❌ Debe retornar 400 para ID inválido" name="🧪 Tests Unitarios - CoffeeHub API GET /api/products/:id ❌ Debe retornar 400 para ID inválido" time="0.008">
+    </testcase>
+    <testcase classname="🧪 Tests Unitarios - CoffeeHub API GET /api/stats ✅ Debe retornar estadísticas de productos" name="🧪 Tests Unitarios - CoffeeHub API GET /api/stats ✅ Debe retornar estadísticas de productos" time="0.113">
+    </testcase>
+    <testcase classname="🧪 Tests Unitarios - CoffeeHub API CORS Tests ✅ Debe permitir origen localhost:8080" name="🧪 Tests Unitarios - CoffeeHub API CORS Tests ✅ Debe permitir origen localhost:8080" time="0.172">
+    </testcase>
+  </testsuite>
+  <testsuite name="🎯 Casos Edge y Validaciones Extremas" errors="0" failures="0" skipped="0" timestamp="2025-11-09T22:48:50" time="0.065" tests="55">
+    <testcase classname="🎯 Casos Edge y Validaciones Extremas Valores Numéricos Extremos ✅ Debe manejar precio = 0" name="🎯 Casos Edge y Validaciones Extremas Valores Numéricos Extremos ✅ Debe manejar precio = 0" time="0.001">
+    </testcase>
+    <testcase classname="🎯 Casos Edge y Validaciones Extremas Valores Numéricos Extremos ✅ Debe manejar precio muy grande (999999.99)" name="🎯 Casos Edge y Validaciones Extremas Valores Numéricos Extremos ✅ Debe manejar precio muy grande (999999.99)" time="0.001">
+    </testcase>
+    <testcase classname="🎯 Casos Edge y Validaciones Extremas Valores Numéricos Extremos ✅ Debe manejar precio con muchos decimales" name="🎯 Casos Edge y Validaciones Extremas Valores Numéricos Extremos ✅ Debe manejar precio con muchos decimales" time="0">
+    </testcase>
+    <testcase classname="🎯 Casos Edge y Validaciones Extremas Valores Numéricos Extremos ✅ Debe manejar rating = 0" name="🎯 Casos Edge y Validaciones Extremas Valores Numéricos Extremos ✅ Debe manejar rating = 0" time="0.001">
+    </testcase>
+    <testcase classname="🎯 Casos Edge y Validaciones Extremas Valores Numéricos Extremos ✅ Debe manejar rating = 5.0 (máximo)" name="🎯 Casos Edge y Validaciones Extremas Valores Numéricos Extremos ✅ Debe manejar rating = 5.0 (máximo)" time="0">
+    </testcase>
+    <testcase classname="🎯 Casos Edge y Validaciones Extremas Valores Numéricos Extremos ❌ Debe rechazar precio negativo" name="🎯 Casos Edge y Validaciones Extremas Valores Numéricos Extremos ❌ Debe rechazar precio negativo" time="0.001">
+    </testcase>
+    <testcase classname="🎯 Casos Edge y Validaciones Extremas Valores Numéricos Extremos ❌ Debe rechazar rating mayor a 5" name="🎯 Casos Edge y Validaciones Extremas Valores Numéricos Extremos ❌ Debe rechazar rating mayor a 5" time="0.001">
+    </testcase>
+    <testcase classname="🎯 Casos Edge y Validaciones Extremas Strings Extremos y Especiales ✅ Debe manejar string vacío en descripción" name="🎯 Casos Edge y Validaciones Extremas Strings Extremos y Especiales ✅ Debe manejar string vacío en descripción" time="0">
+    </testcase>
+    <testcase classname="🎯 Casos Edge y Validaciones Extremas Strings Extremos y Especiales ✅ Debe manejar nombre muy largo (255 caracteres)" name="🎯 Casos Edge y Validaciones Extremas Strings Extremos y Especiales ✅ Debe manejar nombre muy largo (255 caracteres)" time="0.001">
+    </testcase>
+    <testcase classname="🎯 Casos Edge y Validaciones Extremas Strings Extremos y Especiales ✅ Debe manejar caracteres especiales en nombre" name="🎯 Casos Edge y Validaciones Extremas Strings Extremos y Especiales ✅ Debe manejar caracteres especiales en nombre" time="0">
+    </testcase>
+    <testcase classname="🎯 Casos Edge y Validaciones Extremas Strings Extremos y Especiales ✅ Debe manejar emojis en descripción" name="🎯 Casos Edge y Validaciones Extremas Strings Extremos y Especiales ✅ Debe manejar emojis en descripción" time="0.001">
+    </testcase>
+    <testcase classname="🎯 Casos Edge y Validaciones Extremas Strings Extremos y Especiales ✅ Debe manejar HTML/scripts en campos de texto" name="🎯 Casos Edge y Validaciones Extremas Strings Extremos y Especiales ✅ Debe manejar HTML/scripts en campos de texto" time="0.004">
+    </testcase>
+    <testcase classname="🎯 Casos Edge y Validaciones Extremas Strings Extremos y Especiales ✅ Debe manejar SQL injection en campos" name="🎯 Casos Edge y Validaciones Extremas Strings Extremos y Especiales ✅ Debe manejar SQL injection en campos" time="0">
+    </testcase>
+    <testcase classname="🎯 Casos Edge y Validaciones Extremas Strings Extremos y Especiales ❌ Debe rechazar nombre vacío" name="🎯 Casos Edge y Validaciones Extremas Strings Extremos y Especiales ❌ Debe rechazar nombre vacío" time="0">
+    </testcase>
+    <testcase classname="🎯 Casos Edge y Validaciones Extremas Strings Extremos y Especiales ❌ Debe rechazar nombre con solo espacios" name="🎯 Casos Edge y Validaciones Extremas Strings Extremos y Especiales ❌ Debe rechazar nombre con solo espacios" time="0.001">
+    </testcase>
+    <testcase classname="🎯 Casos Edge y Validaciones Extremas Tipos de Datos Incorrectos ❌ Debe rechazar precio como string" name="🎯 Casos Edge y Validaciones Extremas Tipos de Datos Incorrectos ❌ Debe rechazar precio como string" time="0">
+    </testcase>
+    <testcase classname="🎯 Casos Edge y Validaciones Extremas Tipos de Datos Incorrectos ❌ Debe rechazar rating como string" name="🎯 Casos Edge y Validaciones Extremas Tipos de Datos Incorrectos ❌ Debe rechazar rating como string" time="0.001">
+    </testcase>
+    <testcase classname="🎯 Casos Edge y Validaciones Extremas Tipos de Datos Incorrectos ❌ Debe rechazar array cuando se espera string" name="🎯 Casos Edge y Validaciones Extremas Tipos de Datos Incorrectos ❌ Debe rechazar array cuando se espera string" time="0">
+    </testcase>
+    <testcase classname="🎯 Casos Edge y Validaciones Extremas Tipos de Datos Incorrectos ❌ Debe rechazar null en campos requeridos" name="🎯 Casos Edge y Validaciones Extremas Tipos de Datos Incorrectos ❌ Debe rechazar null en campos requeridos" time="0">
+    </testcase>
+    <testcase classname="🎯 Casos Edge y Validaciones Extremas Tipos de Datos Incorrectos ❌ Debe rechazar undefined en campos requeridos" name="🎯 Casos Edge y Validaciones Extremas Tipos de Datos Incorrectos ❌ Debe rechazar undefined en campos requeridos" time="0.001">
+    </testcase>
+    <testcase classname="🎯 Casos Edge y Validaciones Extremas Tipos de Datos Incorrectos ✅ Debe convertir string numérico a número si es posible" name="🎯 Casos Edge y Validaciones Extremas Tipos de Datos Incorrectos ✅ Debe convertir string numérico a número si es posible" time="0">
+    </testcase>
+    <testcase classname="🎯 Casos Edge y Validaciones Extremas ObjectIds Problemáticos ❌ Debe rechazar ID con formato inválido" name="🎯 Casos Edge y Validaciones Extremas ObjectIds Problemáticos ❌ Debe rechazar ID con formato inválido" time="0">
+    </testcase>
+    <testcase classname="🎯 Casos Edge y Validaciones Extremas ObjectIds Problemáticos ❌ Debe rechazar ID vacío" name="🎯 Casos Edge y Validaciones Extremas ObjectIds Problemáticos ❌ Debe rechazar ID vacío" time="0.001">
+    </testcase>
+    <testcase classname="🎯 Casos Edge y Validaciones Extremas ObjectIds Problemáticos ❌ Debe rechazar ID null" name="🎯 Casos Edge y Validaciones Extremas ObjectIds Problemáticos ❌ Debe rechazar ID null" time="0">
+    </testcase>
+    <testcase classname="🎯 Casos Edge y Validaciones Extremas ObjectIds Problemáticos ❌ Debe rechazar ID undefined" name="🎯 Casos Edge y Validaciones Extremas ObjectIds Problemáticos ❌ Debe rechazar ID undefined" time="0">
+    </testcase>
+    <testcase classname="🎯 Casos Edge y Validaciones Extremas ObjectIds Problemáticos ✅ Debe aceptar ID válido de 24 caracteres hex" name="🎯 Casos Edge y Validaciones Extremas ObjectIds Problemáticos ✅ Debe aceptar ID válido de 24 caracteres hex" time="0.001">
+    </testcase>
+    <testcase classname="🎯 Casos Edge y Validaciones Extremas ObjectIds Problemáticos ❌ Debe fallar al buscar con ID de tipo incorrecto" name="🎯 Casos Edge y Validaciones Extremas ObjectIds Problemáticos ❌ Debe fallar al buscar con ID de tipo incorrecto" time="0">
+    </testcase>
+    <testcase classname="🎯 Casos Edge y Validaciones Extremas Colecciones Vacías y Valores Null ✅ Debe retornar array vacío si no hay productos" name="🎯 Casos Edge y Validaciones Extremas Colecciones Vacías y Valores Null ✅ Debe retornar array vacío si no hay productos" time="0.001">
+    </testcase>
+    <testcase classname="🎯 Casos Edge y Validaciones Extremas Colecciones Vacías y Valores Null ✅ Debe retornar null al buscar en colección vacía" name="🎯 Casos Edge y Validaciones Extremas Colecciones Vacías y Valores Null ✅ Debe retornar null al buscar en colección vacía" time="0.001">
+    </testcase>
+    <testcase classname="🎯 Casos Edge y Validaciones Extremas Colecciones Vacías y Valores Null ✅ Debe manejar búsqueda con criterios que no coinciden" name="🎯 Casos Edge y Validaciones Extremas Colecciones Vacías y Valores Null ✅ Debe manejar búsqueda con criterios que no coinciden" time="0">
+    </testcase>
+    <testcase classname="🎯 Casos Edge y Validaciones Extremas Colecciones Vacías y Valores Null ✅ Debe contar 0 en colección vacía" name="🎯 Casos Edge y Validaciones Extremas Colecciones Vacías y Valores Null ✅ Debe contar 0 en colección vacía" time="0">
+    </testcase>
+    <testcase classname="🎯 Casos Edge y Validaciones Extremas Operaciones Concurrentes y Race Conditions ✅ Debe manejar múltiples inserciones simultáneas" name="🎯 Casos Edge y Validaciones Extremas Operaciones Concurrentes y Race Conditions ✅ Debe manejar múltiples inserciones simultáneas" time="0.001">
+    </testcase>
+    <testcase classname="🎯 Casos Edge y Validaciones Extremas Operaciones Concurrentes y Race Conditions ✅ Debe manejar lecturas concurrentes del mismo documento" name="🎯 Casos Edge y Validaciones Extremas Operaciones Concurrentes y Race Conditions ✅ Debe manejar lecturas concurrentes del mismo documento" time="0">
+    </testcase>
+    <testcase classname="🎯 Casos Edge y Validaciones Extremas Operaciones Concurrentes y Race Conditions ⚠️ Debe detectar conflicto de actualización concurrente" name="🎯 Casos Edge y Validaciones Extremas Operaciones Concurrentes y Race Conditions ⚠️ Debe detectar conflicto de actualización concurrente" time="0.001">
+    </testcase>
+    <testcase classname="🎯 Casos Edge y Validaciones Extremas Campos Opcionales y Valores por Defecto ✅ Debe insertar con campos opcionales ausentes" name="🎯 Casos Edge y Validaciones Extremas Campos Opcionales y Valores por Defecto ✅ Debe insertar con campos opcionales ausentes" time="0">
+    </testcase>
+    <testcase classname="🎯 Casos Edge y Validaciones Extremas Campos Opcionales y Valores por Defecto ✅ Debe aplicar valores por defecto si no se proporcionan" name="🎯 Casos Edge y Validaciones Extremas Campos Opcionales y Valores por Defecto ✅ Debe aplicar valores por defecto si no se proporcionan" time="0">
+    </testcase>
+    <testcase classname="🎯 Casos Edge y Validaciones Extremas Campos Opcionales y Valores por Defecto ✅ Debe permitir actualizar solo algunos campos" name="🎯 Casos Edge y Validaciones Extremas Campos Opcionales y Valores por Defecto ✅ Debe permitir actualizar solo algunos campos" time="0.001">
+    </testcase>
+    <testcase classname="🎯 Casos Edge y Validaciones Extremas Unicode y Caracteres Internacionales ✅ Debe manejar texto en chino" name="🎯 Casos Edge y Validaciones Extremas Unicode y Caracteres Internacionales ✅ Debe manejar texto en chino" time="0">
+    </testcase>
+    <testcase classname="🎯 Casos Edge y Validaciones Extremas Unicode y Caracteres Internacionales ✅ Debe manejar texto en árabe" name="🎯 Casos Edge y Validaciones Extremas Unicode y Caracteres Internacionales ✅ Debe manejar texto en árabe" time="0">
+    </testcase>
+    <testcase classname="🎯 Casos Edge y Validaciones Extremas Unicode y Caracteres Internacionales ✅ Debe manejar texto en cirílico" name="🎯 Casos Edge y Validaciones Extremas Unicode y Caracteres Internacionales ✅ Debe manejar texto en cirílico" time="0.001">
+    </testcase>
+    <testcase classname="🎯 Casos Edge y Validaciones Extremas Unicode y Caracteres Internacionales ✅ Debe manejar texto en japonés (hiragana, katakana, kanji)" name="🎯 Casos Edge y Validaciones Extremas Unicode y Caracteres Internacionales ✅ Debe manejar texto en japonés (hiragana, katakana, kanji)" time="0">
+    </testcase>
+    <testcase classname="🎯 Casos Edge y Validaciones Extremas Fechas Extremas y Problemáticas ✅ Debe manejar fecha muy antigua (1900)" name="🎯 Casos Edge y Validaciones Extremas Fechas Extremas y Problemáticas ✅ Debe manejar fecha muy antigua (1900)" time="0.001">
+    </testcase>
+    <testcase classname="🎯 Casos Edge y Validaciones Extremas Fechas Extremas y Problemáticas ✅ Debe manejar fecha futura (2100)" name="🎯 Casos Edge y Validaciones Extremas Fechas Extremas y Problemáticas ✅ Debe manejar fecha futura (2100)" time="0">
+    </testcase>
+    <testcase classname="🎯 Casos Edge y Validaciones Extremas Fechas Extremas y Problemáticas ✅ Debe manejar fecha actual" name="🎯 Casos Edge y Validaciones Extremas Fechas Extremas y Problemáticas ✅ Debe manejar fecha actual" time="0.001">
+    </testcase>
+    <testcase classname="🎯 Casos Edge y Validaciones Extremas Fechas Extremas y Problemáticas ❌ Debe rechazar fecha inválida" name="🎯 Casos Edge y Validaciones Extremas Fechas Extremas y Problemáticas ❌ Debe rechazar fecha inválida" time="0">
+    </testcase>
+    <testcase classname="🎯 Casos Edge y Validaciones Extremas Búsquedas Complejas y Edge Cases ✅ Debe buscar con query vacío (retorna todo)" name="🎯 Casos Edge y Validaciones Extremas Búsquedas Complejas y Edge Cases ✅ Debe buscar con query vacío (retorna todo)" time="0.001">
+    </testcase>
+    <testcase classname="🎯 Casos Edge y Validaciones Extremas Búsquedas Complejas y Edge Cases ✅ Debe filtrar por múltiples criterios" name="🎯 Casos Edge y Validaciones Extremas Búsquedas Complejas y Edge Cases ✅ Debe filtrar por múltiples criterios" time="0">
+    </testcase>
+    <testcase classname="🎯 Casos Edge y Validaciones Extremas Búsquedas Complejas y Edge Cases ✅ Debe buscar con texto parcial (LIKE)" name="🎯 Casos Edge y Validaciones Extremas Búsquedas Complejas y Edge Cases ✅ Debe buscar con texto parcial (LIKE)" time="0.001">
+    </testcase>
+    <testcase classname="🎯 Casos Edge y Validaciones Extremas Búsquedas Complejas y Edge Cases ✅ Debe buscar con case-insensitive" name="🎯 Casos Edge y Validaciones Extremas Búsquedas Complejas y Edge Cases ✅ Debe buscar con case-insensitive" time="0">
+    </testcase>
+    <testcase classname="🎯 Casos Edge y Validaciones Extremas Límites de Tamaño de Documentos ❌ Debe rechazar documento que excede 16MB" name="🎯 Casos Edge y Validaciones Extremas Límites de Tamaño de Documentos ❌ Debe rechazar documento que excede 16MB" time="0.001">
+    </testcase>
+    <testcase classname="🎯 Casos Edge y Validaciones Extremas Límites de Tamaño de Documentos ✅ Debe aceptar documento de tamaño razonable" name="🎯 Casos Edge y Validaciones Extremas Límites de Tamaño de Documentos ✅ Debe aceptar documento de tamaño razonable" time="0">
+    </testcase>
+    <testcase classname="🎯 Casos Edge y Validaciones Extremas Límites de Tamaño de Documentos ✅ Debe manejar array grande de productos" name="🎯 Casos Edge y Validaciones Extremas Límites de Tamaño de Documentos ✅ Debe manejar array grande de productos" time="0">
+    </testcase>
+    <testcase classname="🎯 Casos Edge y Validaciones Extremas Seguridad y Sanitización de Datos ✅ Debe escapar caracteres peligrosos en queries" name="🎯 Casos Edge y Validaciones Extremas Seguridad y Sanitización de Datos ✅ Debe escapar caracteres peligrosos en queries" time="0.001">
+    </testcase>
+    <testcase classname="🎯 Casos Edge y Validaciones Extremas Seguridad y Sanitización de Datos ✅ Debe prevenir NoSQL injection" name="🎯 Casos Edge y Validaciones Extremas Seguridad y Sanitización de Datos ✅ Debe prevenir NoSQL injection" time="0">
+    </testcase>
+    <testcase classname="🎯 Casos Edge y Validaciones Extremas Seguridad y Sanitización de Datos ✅ Debe limpiar datos antes de insertar" name="🎯 Casos Edge y Validaciones Extremas Seguridad y Sanitización de Datos ✅ Debe limpiar datos antes de insertar" time="0">
+    </testcase>
+  </testsuite>
+  <testsuite name="⚠️ Manejo de Excepciones con MongoDB" errors="0" failures="0" skipped="0" timestamp="2025-11-09T22:48:50" time="0.042" tests="17">
+    <testcase classname="⚠️ Manejo de Excepciones con MongoDB Errores de Conexión ❌ Debe manejar error de conexión a MongoDB" name="⚠️ Manejo de Excepciones con MongoDB Errores de Conexión ❌ Debe manejar error de conexión a MongoDB" time="0.002">
+    </testcase>
+    <testcase classname="⚠️ Manejo de Excepciones con MongoDB Errores de Conexión ❌ Debe manejar timeout de conexión" name="⚠️ Manejo de Excepciones con MongoDB Errores de Conexión ❌ Debe manejar timeout de conexión" time="0.001">
+    </testcase>
+    <testcase classname="⚠️ Manejo de Excepciones con MongoDB Errores de Conexión ❌ Debe manejar error de autenticación" name="⚠️ Manejo de Excepciones con MongoDB Errores de Conexión ❌ Debe manejar error de autenticación" time="0">
+    </testcase>
+    <testcase classname="⚠️ Manejo de Excepciones con MongoDB Errores de Operaciones CRUD ❌ Debe manejar error al insertar documento duplicado" name="⚠️ Manejo de Excepciones con MongoDB Errores de Operaciones CRUD ❌ Debe manejar error al insertar documento duplicado" time="0.001">
+    </testcase>
+    <testcase classname="⚠️ Manejo de Excepciones con MongoDB Errores de Operaciones CRUD ❌ Debe manejar error de documento demasiado grande" name="⚠️ Manejo de Excepciones con MongoDB Errores de Operaciones CRUD ❌ Debe manejar error de documento demasiado grande" time="0">
+    </testcase>
+    <testcase classname="⚠️ Manejo de Excepciones con MongoDB Errores de Operaciones CRUD ❌ Debe manejar error de actualización con ObjectId inválido" name="⚠️ Manejo de Excepciones con MongoDB Errores de Operaciones CRUD ❌ Debe manejar error de actualización con ObjectId inválido" time="0.001">
+    </testcase>
+    <testcase classname="⚠️ Manejo de Excepciones con MongoDB Errores de Operaciones CRUD ❌ Debe manejar error al eliminar con filtro inválido" name="⚠️ Manejo de Excepciones con MongoDB Errores de Operaciones CRUD ❌ Debe manejar error al eliminar con filtro inválido" time="0">
+    </testcase>
+    <testcase classname="⚠️ Manejo de Excepciones con MongoDB Errores de Validación de Datos ❌ Debe rechazar producto sin campos requeridos" name="⚠️ Manejo de Excepciones con MongoDB Errores de Validación de Datos ❌ Debe rechazar producto sin campos requeridos" time="0.001">
+    </testcase>
+    <testcase classname="⚠️ Manejo de Excepciones con MongoDB Errores de Validación de Datos ❌ Debe rechazar precio negativo" name="⚠️ Manejo de Excepciones con MongoDB Errores de Validación de Datos ❌ Debe rechazar precio negativo" time="0">
+    </testcase>
+    <testcase classname="⚠️ Manejo de Excepciones con MongoDB Errores de Validación de Datos ❌ Debe rechazar rating fuera de rango" name="⚠️ Manejo de Excepciones con MongoDB Errores de Validación de Datos ❌ Debe rechazar rating fuera de rango" time="0">
+    </testcase>
+    <testcase classname="⚠️ Manejo de Excepciones con MongoDB Errores de Validación de Datos ❌ Debe rechazar tipo de dato incorrecto" name="⚠️ Manejo de Excepciones con MongoDB Errores de Validación de Datos ❌ Debe rechazar tipo de dato incorrecto" time="0">
+    </testcase>
+    <testcase classname="⚠️ Manejo de Excepciones con MongoDB Recuperación de Errores ✅ Debe reintentar operación después de error temporal" name="⚠️ Manejo de Excepciones con MongoDB Recuperación de Errores ✅ Debe reintentar operación después de error temporal" time="0">
+    </testcase>
+    <testcase classname="⚠️ Manejo de Excepciones con MongoDB Recuperación de Errores ✅ Debe usar fallback cuando la operación falla" name="⚠️ Manejo de Excepciones con MongoDB Recuperación de Errores ✅ Debe usar fallback cuando la operación falla" time="0.001">
+    </testcase>
+    <testcase classname="⚠️ Manejo de Excepciones con MongoDB Casos Especiales de Errores ❌ Debe manejar operación en colección inexistente" name="⚠️ Manejo de Excepciones con MongoDB Casos Especiales de Errores ❌ Debe manejar operación en colección inexistente" time="0">
+    </testcase>
+    <testcase classname="⚠️ Manejo de Excepciones con MongoDB Casos Especiales de Errores ❌ Debe manejar error de espacio en disco lleno" name="⚠️ Manejo de Excepciones con MongoDB Casos Especiales de Errores ❌ Debe manejar error de espacio en disco lleno" time="0.001">
+    </testcase>
+    <testcase classname="⚠️ Manejo de Excepciones con MongoDB Casos Especiales de Errores ❌ Debe manejar error de replica set no disponible" name="⚠️ Manejo de Excepciones con MongoDB Casos Especiales de Errores ❌ Debe manejar error de replica set no disponible" time="0">
+    </testcase>
+    <testcase classname="⚠️ Manejo de Excepciones con MongoDB Casos Especiales de Errores ✅ Debe loguear errores para debugging" name="⚠️ Manejo de Excepciones con MongoDB Casos Especiales de Errores ✅ Debe loguear errores para debugging" time="0.001">
+    </testcase>
+  </testsuite>
+  <testsuite name="🎭 Tests con Mocks de MongoDB - Products API" errors="0" failures="0" skipped="0" timestamp="2025-11-09T22:48:50" time="0.037" tests="12">
+    <testcase classname="🎭 Tests con Mocks de MongoDB - Products API GET - Operaciones de Lectura ✅ Debe obtener todos los productos" name="🎭 Tests con Mocks de MongoDB - Products API GET - Operaciones de Lectura ✅ Debe obtener todos los productos" time="0.002">
+    </testcase>
+    <testcase classname="🎭 Tests con Mocks de MongoDB - Products API GET - Operaciones de Lectura ✅ Debe obtener un producto por ID" name="🎭 Tests con Mocks de MongoDB - Products API GET - Operaciones de Lectura ✅ Debe obtener un producto por ID" time="0.001">
+    </testcase>
+    <testcase classname="🎭 Tests con Mocks de MongoDB - Products API GET - Operaciones de Lectura ✅ Debe retornar null si el producto no existe" name="🎭 Tests con Mocks de MongoDB - Products API GET - Operaciones de Lectura ✅ Debe retornar null si el producto no existe" time="0">
+    </testcase>
+    <testcase classname="🎭 Tests con Mocks de MongoDB - Products API GET - Operaciones de Lectura ✅ Debe contar la cantidad de productos" name="🎭 Tests con Mocks de MongoDB - Products API GET - Operaciones de Lectura ✅ Debe contar la cantidad de productos" time="0.001">
+    </testcase>
+    <testcase classname="🎭 Tests con Mocks de MongoDB - Products API POST - Operaciones de Creación ✅ Debe crear un nuevo producto" name="🎭 Tests con Mocks de MongoDB - Products API POST - Operaciones de Creación ✅ Debe crear un nuevo producto" time="0">
+    </testcase>
+    <testcase classname="🎭 Tests con Mocks de MongoDB - Products API POST - Operaciones de Creación ✅ Debe generar un ID automáticamente al insertar" name="🎭 Tests con Mocks de MongoDB - Products API POST - Operaciones de Creación ✅ Debe generar un ID automáticamente al insertar" time="0.001">
+    </testcase>
+    <testcase classname="🎭 Tests con Mocks de MongoDB - Products API PUT - Operaciones de Actualización ✅ Debe actualizar un producto existente" name="🎭 Tests con Mocks de MongoDB - Products API PUT - Operaciones de Actualización ✅ Debe actualizar un producto existente" time="0">
+    </testcase>
+    <testcase classname="🎭 Tests con Mocks de MongoDB - Products API PUT - Operaciones de Actualización ✅ Debe retornar matchedCount=0 si el producto no existe" name="🎭 Tests con Mocks de MongoDB - Products API PUT - Operaciones de Actualización ✅ Debe retornar matchedCount=0 si el producto no existe" time="0">
+    </testcase>
+    <testcase classname="🎭 Tests con Mocks de MongoDB - Products API DELETE - Operaciones de Eliminación ✅ Debe eliminar un producto existente" name="🎭 Tests con Mocks de MongoDB - Products API DELETE - Operaciones de Eliminación ✅ Debe eliminar un producto existente" time="0.001">
+    </testcase>
+    <testcase classname="🎭 Tests con Mocks de MongoDB - Products API DELETE - Operaciones de Eliminación ✅ Debe retornar deletedCount=0 si el producto no existe" name="🎭 Tests con Mocks de MongoDB - Products API DELETE - Operaciones de Eliminación ✅ Debe retornar deletedCount=0 si el producto no existe" time="0">
+    </testcase>
+    <testcase classname="🎭 Tests con Mocks de MongoDB - Products API Validación del Mock ✅ Debe resetear datos del mock correctamente" name="🎭 Tests con Mocks de MongoDB - Products API Validación del Mock ✅ Debe resetear datos del mock correctamente" time="0">
+    </testcase>
+    <testcase classname="🎭 Tests con Mocks de MongoDB - Products API Validación del Mock ✅ MockObjectId debe ser válido" name="🎭 Tests con Mocks de MongoDB - Products API Validación del Mock ✅ MockObjectId debe ser válido" time="0.001">
     </testcase>
   </testsuite>
 </testsuites>

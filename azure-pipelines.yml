@@ -1,6 +1,6 @@
 # ===========================================
 # COFFEEHUB CI/CD - QA y PRODUCCIÓN (Azure + MongoDB)
-# Con Tests Automáticos Integrados
+# Con Tests Automáticos Integrados + SonarCloud
 # ===========================================
 
 trigger:
@@ -29,10 +29,10 @@ variables:
 # ==================== STAGE 1: BUILD Y TESTS ====================
 stages:
 - stage: Build_And_Test
-  displayName: "CI: Instalar, Probar y Empaquetar"
+  displayName: "CI: Instalar, Probar, Analizar y Empaquetar"
   jobs:
   - job: BuildAndTestBackend
-    displayName: "🔨 Build + Tests Backend"
+    displayName: "🔨 Build + Tests Backend + SonarCloud"
     steps:
       # ---- Instalar dependencias ----
       - script: |
@@ -69,6 +69,34 @@ stages:
           summaryFileLocation: 'coffehub/backend/coverage/cobertura-coverage.xml'
           reportDirectory: 'coffehub/backend/coverage'
         condition: succeededOrFailed()
+
+      # ===========================================
+      # 🔎 ANÁLISIS SONARCLOUD
+      # ===========================================
+      - task: SonarCloudPrepare@2
+        displayName: '🔍 Preparar análisis SonarCloud'
+        inputs:
+          SonarCloud: 'SonarCloudConnection'           # nombre de tu conexión en Azure DevOps
+          organization: 'lucianahueda13'                     # tu organización SonarCloud
+          scannerMode: 'CLI'
+          configMode: 'manual'
+          cliProjectKey: 'lucianahueda13_TP7-INGEIII.git'                 # clave del proyecto SonarCloud
+          cliProjectName: 'TP7-INGEIII'
+          extraProperties: |
+            sonar.sources=coffehub/backend/src
+            sonar.tests=coffehub/backend/tests
+            sonar.javascript.lcov.reportPaths=coffehub/backend/coverage/lcov.info
+            sonar.exclusions=**/node_modules/**,**/*.test.js
+            sonar.coverage.exclusions=**/*.test.js
+
+      - task: SonarCloudAnalyze@2
+        displayName: '🧠 Ejecutar análisis SonarCloud'
+
+      - task: SonarCloudPublish@2
+        displayName: '📊 Publicar resultados SonarCloud'
+        inputs:
+          pollingTimeoutSec: '300'
+      # ===========================================
 
       # ---- Publicar Artefacto Backend ----
       - task: PublishPipelineArtifact@1
@@ -136,7 +164,6 @@ stages:
       runOnce:
         deploy:
           steps:
-            # ---- Backend QA ----
             - task: DownloadPipelineArtifact@2
               inputs:
                 artifact: 'backend-code'
@@ -151,7 +178,6 @@ stages:
                 runtimeStack: 'NODE|18-lts'
                 startUpCommand: 'npm install && npm start'
 
-            # ---- Configurar MongoDB QA ----
             - task: AzureCLI@2
               displayName: '⚙️ Configurar MONGODB_URI_QA en Backend'
               inputs:
@@ -169,7 +195,6 @@ stages:
                       MONGODB_URI="$(MONGODB_URI_QA)" \
                       NODE_ENV="qa"
 
-            # ---- Frontend QA ----
             - task: DownloadPipelineArtifact@2
               inputs:
                 artifact: 'frontend-code'
@@ -184,7 +209,6 @@ stages:
                 runtimeStack: 'NODE|18-lts'
                 startUpCommand: 'npm install && npm start'
 
-            # ---- Configurar Frontend QA ----
             - task: AzureCLI@2
               displayName: '⚙️ Configurar BACKEND_URL en Frontend QA'
               inputs:
@@ -201,7 +225,6 @@ stages:
                     --resource-group "$RG" \
                     --settings BACKEND_URL="$BACKEND_URL_VAL"
 
-            # ---- Configurar CORS QA ----
             - task: AzureCLI@2
               displayName: '⚙️ Configurar CORS en Backend QA'
               inputs:
@@ -218,7 +241,6 @@ stages:
                     --resource-group "$RG" \
                     --allowed-origins "$FRONTEND_URL_VAL"
 
-            # ---- Smoke Tests QA ----
             - script: |
                 echo "🔍 Ejecutando Smoke Tests en QA..."
                 sleep 30
@@ -257,7 +279,6 @@ stages:
       runOnce:
         deploy:
           steps:
-            # ---- Backend PROD ----
             - task: DownloadPipelineArtifact@2
               inputs:
                 artifact: 'backend-code'
@@ -272,7 +293,6 @@ stages:
                 runtimeStack: 'NODE|18-lts'
                 startUpCommand: 'npm install && npm start'
 
-            # ---- Configurar MongoDB PROD ----
             - task: AzureCLI@2
               displayName: '⚙️ Configurar MONGODB_URI_PROD en Backend'
               inputs:
@@ -290,7 +310,6 @@ stages:
                       MONGODB_URI="$(MONGODB_URI_PROD)" \
                       NODE_ENV="production"
 
-            # ---- Configurar CORS PROD PRIMERO ----
             - task: AzureCLI@2
               displayName: '⚙️ Configurar CORS en Backend PROD (ANTES de smoke tests)'
               inputs:
@@ -307,7 +326,6 @@ stages:
                     --resource-group "$RG" \
                     --allowed-origins "$FRONTEND_URL_VAL"
 
-            # ---- Frontend PROD ----
             - task: DownloadPipelineArtifact@2
               inputs:
                 artifact: 'frontend-code'
@@ -322,7 +340,6 @@ stages:
                 runtimeStack: 'NODE|18-lts'
                 startUpCommand: 'npm install && npm start'
 
-            # ---- Configurar Frontend PROD ----
             - task: AzureCLI@2
               displayName: '⚙️ Configurar BACKEND_URL en Frontend PROD'
               inputs:
@@ -339,7 +356,6 @@ stages:
                     --resource-group "$RG" \
                     --settings BACKEND_URL="$BACKEND_URL_VAL"
 
-            # ---- Smoke Tests PROD CON MÁS ESPERA Y MEJOR DEBUGGING ----
             - script: |
                 echo "🔍 Ejecutando Smoke Tests en PROD..."
                 sleep 60
