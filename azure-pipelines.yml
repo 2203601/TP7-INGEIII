@@ -1,5 +1,5 @@
 # ===========================================
-# ☕ COFFEEHUB CI/CD - QA y PRODUCCIÓN (Azure + MongoDB + SonarCloud)
+# ☕ COFFEEHUB CI/CD - QA y PRODUCCIÓN (Azure + MongoDB + SonarCloud Unificado)
 # ===========================================
 
 trigger:
@@ -26,18 +26,18 @@ variables:
     value: 'Coffeehub-Front-Prod'
 
 # ===========================================================
-# STAGE 1: BUILD + TEST + ANALYSIS
+# STAGE 1: BUILD + TEST + SONARCLOUD (UNIFICADO)
 # ===========================================================
 stages:
 - stage: Build_And_Test
-  displayName: "CI: Build + Tests + SonarCloud"
+  displayName: "CI: Build + Tests + SonarCloud (Backend + Frontend)"
   jobs:
-  # ============================
-  # 🧱 BACKEND
-  # ============================
-  - job: BuildAndTestBackend
-    displayName: "🔨 Backend: Build + Tests + SonarCloud"
+  - job: BuildAndAnalyze
+    displayName: "🔨 Build + Tests + Análisis SonarCloud (Full Project)"
     steps:
+      # ===============================
+      # 📦 BACKEND
+      # ===============================
       - script: |
           echo "📦 Instalando dependencias del backend..."
           npm install
@@ -51,65 +51,9 @@ stages:
         workingDirectory: 'coffehub/backend'
         continueOnError: false
 
-      - task: PublishTestResults@2
-        displayName: '📋 Publicar Resultados Tests Backend'
-        inputs:
-          testResultsFormat: 'JUnit'
-          testResultsFiles: '**/junit.xml'
-          searchFolder: 'coffehub/backend'
-          mergeTestResults: true
-          failTaskOnFailedTests: true
-          testRunTitle: 'Backend Tests'
-        condition: succeededOrFailed()
-
-      - task: PublishCodeCoverageResults@1
-        displayName: '📊 Publicar Code Coverage Backend'
-        inputs:
-          codeCoverageTool: 'Cobertura'
-          summaryFileLocation: 'coffehub/backend/coverage/cobertura-coverage.xml'
-          reportDirectory: 'coffehub/backend/coverage'
-        condition: succeededOrFailed()
-
-      # 🔎 SONARCLOUD BACKEND
-      - task: SonarCloudPrepare@2
-        displayName: '🔍 Preparar análisis SonarCloud (Backend)'
-        inputs:
-          SonarCloud: 'SonarCloudConnection'
-          organization: 'lucianahueda13'
-          scannerMode: 'CLI'
-          configMode: 'manual'
-          cliProjectKey: 'lucianahueda13_CoffeeHub-Backend'
-          cliProjectName: 'CoffeeHub-Backend'
-          extraProperties: |
-            sonar.sources=coffehub/backend
-            sonar.tests=coffehub/backend/tests
-            sonar.test.inclusions=**/*.test.js
-            sonar.exclusions=**/node_modules/**,**/coverage/**,**/jest.config.js,**/junit.xml,**/web.config
-            sonar.coverage.exclusions=**/*.test.js,**/coverage/**,**/jest.config.js
-            sonar.javascript.lcov.reportPaths=coffehub/backend/coverage/lcov.info
-            sonar.sourceEncoding=UTF-8
-
-      - task: SonarCloudAnalyze@2
-        displayName: '🧠 Ejecutar análisis SonarCloud (Backend)'
-
-      - task: SonarCloudPublish@2
-        displayName: '📊 Publicar resultados SonarCloud (Backend)'
-        inputs:
-          pollingTimeoutSec: '300'
-
-      - task: PublishPipelineArtifact@1
-        inputs:
-          targetPath: 'coffehub/backend'
-          artifact: 'backend-code'
-        displayName: "📦 Publicar Código Backend"
-        condition: succeeded()
-
-  # ============================
-  # 🧱 FRONTEND
-  # ============================
-  - job: BuildFrontend
-    displayName: "🔨 Frontend: Build + Tests + SonarCloud"
-    steps:
+      # ===============================
+      # 📦 FRONTEND
+      # ===============================
       - script: |
           echo "📦 Instalando dependencias del frontend..."
           npm install
@@ -123,51 +67,66 @@ stages:
         workingDirectory: 'coffehub/frontend'
         continueOnError: false
 
+      # ===============================
+      # 📊 Publicar Resultados y Cobertura
+      # ===============================
       - task: PublishTestResults@2
-        displayName: '📋 Publicar Resultados Tests Frontend'
+        displayName: '📋 Publicar Resultados Tests (Backend + Frontend)'
         inputs:
           testResultsFormat: 'JUnit'
           testResultsFiles: '**/junit.xml'
-          searchFolder: 'coffehub/frontend'
+          searchFolder: 'coffehub'
           mergeTestResults: true
           failTaskOnFailedTests: true
-          testRunTitle: 'Frontend Tests'
+          testRunTitle: 'CoffeeHub Tests (Backend + Frontend)'
         condition: succeededOrFailed()
 
       - task: PublishCodeCoverageResults@1
-        displayName: '📊 Publicar Code Coverage Frontend'
+        displayName: '📊 Publicar Code Coverage (Unificado)'
         inputs:
           codeCoverageTool: 'Cobertura'
-          summaryFileLocation: 'coffehub/frontend/coverage/cobertura-coverage.xml'
-          reportDirectory: 'coffehub/frontend/coverage'
+          summaryFileLocation: 'coffehub/backend/coverage/cobertura-coverage.xml'
+          reportDirectory: 'coffehub/backend/coverage'
         condition: succeededOrFailed()
 
-      # 🔎 SONARCLOUD FRONTEND
+      # =====================================================
+      # 🔎 SONARCLOUD (UNIFICADO: TP7-INGEIII)
+      # =====================================================
       - task: SonarCloudPrepare@2
-        displayName: '🔍 Preparar análisis SonarCloud (Frontend)'
+        displayName: '🔍 Preparar análisis SonarCloud (Unificado)'
         inputs:
           SonarCloud: 'SonarCloudConnection'
           organization: 'lucianahueda13'
           scannerMode: 'CLI'
           configMode: 'manual'
-          cliProjectKey: 'lucianahueda13_CoffeeHub-Frontend'
-          cliProjectName: 'CoffeeHub-Frontend'
+          cliProjectKey: 'lucianahueda13_TP7-INGEIII'
+          cliProjectName: 'TP7-INGEIII'
           extraProperties: |
-            sonar.sources=coffehub/frontend
-            sonar.tests=coffehub/frontend/__tests__
+            sonar.sources=coffehub/backend,coffehub/frontend
+            sonar.tests=coffehub/backend/tests,coffehub/frontend/__tests__
             sonar.test.inclusions=**/*.test.js
-            sonar.exclusions=**/node_modules/**,**/coverage/**,**/*.config.js,**/jest.setup.js
-            sonar.coverage.exclusions=**/*.test.js,**/coverage/**
-            sonar.javascript.lcov.reportPaths=coffehub/frontend/coverage/lcov.info
+            sonar.exclusions=**/node_modules/**,**/coverage/**,**/*.config.js,**/*.setup.js,**/*.test.js,**/*.html,**/jest.env.js,**/jest.setup.js,**/server.js
+            sonar.coverage.exclusions=**/*.test.js,**/coverage/**,**/*.config.js,**/*.setup.js
+            sonar.javascript.lcov.reportPaths=coffehub/backend/coverage/lcov.info,coffehub/frontend/coverage/lcov.info
             sonar.sourceEncoding=UTF-8
 
       - task: SonarCloudAnalyze@2
-        displayName: '🧠 Ejecutar análisis SonarCloud (Frontend)'
+        displayName: '🧠 Ejecutar análisis SonarCloud (TP7-INGEIII)'
 
       - task: SonarCloudPublish@2
-        displayName: '📊 Publicar resultados SonarCloud (Frontend)'
+        displayName: '📊 Publicar resultados SonarCloud'
         inputs:
           pollingTimeoutSec: '300'
+
+      # ===============================
+      # 📦 Publicar Artefactos
+      # ===============================
+      - task: PublishPipelineArtifact@1
+        inputs:
+          targetPath: 'coffehub/backend'
+          artifact: 'backend-code'
+        displayName: "📦 Publicar Código Backend"
+        condition: succeeded()
 
       - task: PublishPipelineArtifact@1
         inputs:
