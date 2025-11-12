@@ -106,7 +106,7 @@ stages:
             sonar.tests=coffehub/backend/tests,coffehub/frontend/api.test.js
             sonar.test.inclusions=**/*.test.js
             sonar.exclusions=**/node_modules/**,**/coverage/**,**/*.config.js,**/*.setup.js,**/*.test.js,**/*.html,**/jest.env.js,**/jest.setup.js,coffehub/frontend/server.js
-            sonar.coverage.exclusions=**/*.test.js,**/coverage/**,**/*.config.js,**/*.setup.js
+            sonar.coverage.exclusions=**/*.test.js,**/coverage/**,**/*.config.js,**/*.setup.js, coffehub/backend/tests
             sonar.javascript.lcov.reportPaths=coffehub/backend/coverage/lcov.info,coffehub/frontend/coverage/lcov.info
             sonar.sourceEncoding=UTF-8
 
