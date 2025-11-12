@@ -103,7 +103,7 @@ stages:
           cliProjectName: 'TP7-INGEIII'
           extraProperties: |
             sonar.sources=coffehub/backend,coffehub/frontend
-            sonar.tests=coffehub/backend/tests,coffehub/frontend/__tests__
+            sonar.tests=coffehub/backend/tests,coffehub/frontend/api.test.js
             sonar.test.inclusions=**/*.test.js
             sonar.exclusions=**/node_modules/**,**/coverage/**,**/*.config.js,**/*.setup.js,**/*.test.js,**/*.html,**/jest.env.js,**/jest.setup.js,**/server.js
             sonar.coverage.exclusions=**/*.test.js,**/coverage/**,**/*.config.js,**/*.setup.js
