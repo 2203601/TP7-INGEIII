@@ -46,8 +46,75 @@ async function connectDB() {
 }
 
 // ================================
-// 🛡️ FUNCIONES DE VALIDACIÓN
+// 🛡️ FUNCIONES DE VALIDACIÓN REFACTORIZADAS
 // ================================
+
+/**
+ * Valida el nombre del producto
+ */
+function validateName(name, isUpdate) {
+  if (isUpdate && name === undefined) return [];
+  
+  const errors = [];
+  if (!name || typeof name !== 'string') {
+    errors.push('Name is required and must be a string');
+  } else if (name.trim() === '') {
+    errors.push('Name cannot be empty or only whitespace');
+  } else if (name.length > 255) {
+    errors.push('Name cannot exceed 255 characters');
+  }
+  return errors;
+}
+
+/**
+ * Valida el precio del producto
+ */
+function validatePrice(price, isUpdate) {
+  if (isUpdate && price === undefined) return [];
+  
+  const errors = [];
+  const priceNum = parseFloat(price);
+  
+  if (isNaN(priceNum)) {
+    errors.push('Price must be a valid number');
+  } else if (priceNum < 0) {
+    errors.push('Price cannot be negative');
+  } else if (priceNum > 999999.99) {
+    errors.push('Price cannot exceed 999,999.99');
+  }
+  return errors;
+}
+
+/**
+ * Valida el rating del producto
+ */
+function validateRating(rating) {
+  if (rating === undefined || rating === null) return [];
+  
+  const errors = [];
+  const ratingNum = parseFloat(rating);
+  
+  if (isNaN(ratingNum)) {
+    errors.push('Rating must be a valid number');
+  } else if (ratingNum < 0 || ratingNum > 5) {
+    errors.push('Rating must be between 0 and 5');
+  }
+  return errors;
+}
+
+/**
+ * Valida campos de tipo string (origin, type, roast, description)
+ */
+function validateStringField(value, fieldName, isUpdate) {
+  if (isUpdate && value === undefined) return [];
+  if (value === undefined || value === null) return [];
+  
+  const errors = [];
+  if (typeof value !== 'string') {
+    errors.push(`${fieldName} must be a string`);
+  }
+  return errors;
+}
 
 /**
  * Valida los datos de un producto
@@ -56,68 +123,15 @@ async function connectDB() {
  * @returns {Object} { valid: boolean, errors: string[] }
  */
 function validateProduct(productData, isUpdate = false) {
-  const errors = [];
-
-  // Validar nombre
-  if (!isUpdate || productData.name !== undefined) {
-    if (!productData.name || typeof productData.name !== 'string') {
-      errors.push('Name is required and must be a string');
-    } else if (productData.name.trim() === '') {
-      errors.push('Name cannot be empty or only whitespace');
-    } else if (productData.name.length > 255) {
-      errors.push('Name cannot exceed 255 characters');
-    }
-  }
-
-  // Validar precio
-  if (!isUpdate || productData.price !== undefined) {
-    const price = parseFloat(productData.price);
-    if (isNaN(price)) {
-      errors.push('Price must be a valid number');
-    } else if (price < 0) {
-      errors.push('Price cannot be negative');
-    } else if (price > 999999.99) {
-      errors.push('Price cannot exceed 999,999.99');
-    }
-  }
-
-  // Validar rating (si existe)
-  if (productData.rating !== undefined && productData.rating !== null) {
-    const rating = parseFloat(productData.rating);
-    if (isNaN(rating)) {
-      errors.push('Rating must be a valid number');
-    } else if (rating < 0 || rating > 5) {
-      errors.push('Rating must be between 0 and 5');
-    }
-  }
-
-  // Validar origin
-  if (!isUpdate || productData.origin !== undefined) {
-    if (productData.origin && typeof productData.origin !== 'string') {
-      errors.push('Origin must be a string');
-    }
-  }
-
-  // Validar type
-  if (!isUpdate || productData.type !== undefined) {
-    if (productData.type && typeof productData.type !== 'string') {
-      errors.push('Type must be a string');
-    }
-  }
-
-  // Validar roast
-  if (!isUpdate || productData.roast !== undefined) {
-    if (productData.roast && typeof productData.roast !== 'string') {
-      errors.push('Roast must be a string');
-    }
-  }
-
-  // Validar description
-  if (productData.description !== undefined && productData.description !== null) {
-    if (typeof productData.description !== 'string') {
-      errors.push('Description must be a string');
-    }
-  }
+  const errors = [
+    ...validateName(productData.name, isUpdate),
+    ...validatePrice(productData.price, isUpdate),
+    ...validateRating(productData.rating),
+    ...validateStringField(productData.origin, 'Origin', isUpdate),
+    ...validateStringField(productData.type, 'Type', isUpdate),
+    ...validateStringField(productData.roast, 'Roast', isUpdate),
+    ...validateStringField(productData.description, 'Description', isUpdate)
+  ];
 
   return {
     valid: errors.length === 0,
