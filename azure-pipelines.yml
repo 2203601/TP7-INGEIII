@@ -170,6 +170,7 @@ stages:
               inputs:
                 azureSubscription: '$(azureServiceConnection)'
                 scriptType: 'bash'
+                scriptLocation: 'inlineScript'
                 inlineScript: |
                   BACKEND_APP='$(backendAppNameQA)'
                   RG='$(RESOURCE_GROUP_NAME)'
@@ -200,6 +201,7 @@ stages:
               inputs:
                 azureSubscription: '$(azureServiceConnection)'
                 scriptType: 'bash'
+                scriptLocation: 'inlineScript'
                 inlineScript: |
                   BACKEND_URL_VAL="https://coffeehub-back-qa-argeftdrb3dkb9du.brazilsouth-01.azurewebsites.net"
                   FRONTEND_APP='$(frontendAppNameQA)'
@@ -214,6 +216,7 @@ stages:
               inputs:
                 azureSubscription: '$(azureServiceConnection)'
                 scriptType: 'bash'
+                scriptLocation: 'inlineScript'
                 inlineScript: |
                   FRONTEND_URL_VAL="https://coffeehub-front-qa-argqggbvc3g0gkdc.brazilsouth-01.azurewebsites.net"
                   BACKEND_APP='$(backendAppNameQA)'
@@ -269,6 +272,7 @@ stages:
               inputs:
                 azureSubscription: '$(azureServiceConnection)'
                 scriptType: 'bash'
+                scriptLocation: 'inlineScript'
                 inlineScript: |
                   BACKEND_APP='$(backendAppNameProd)'
                   RG='$(RESOURCE_GROUP_NAME)'
@@ -284,6 +288,7 @@ stages:
               inputs:
                 azureSubscription: '$(azureServiceConnection)'
                 scriptType: 'bash'
+                scriptLocation: 'inlineScript'
                 inlineScript: |
                   FRONTEND_URL_VAL="https://coffeehub-front-prod-hgh2ehb7bzchh4ft.brazilsouth-01.azurewebsites.net"
                   BACKEND_APP='$(backendAppNameProd)'
@@ -312,6 +317,7 @@ stages:
               inputs:
                 azureSubscription: '$(azureServiceConnection)'
                 scriptType: 'bash'
+                scriptLocation: 'inlineScript'
                 inlineScript: |
                   BACKEND_URL_VAL="https://coffeehub-back-prod-bzgaa5ekbed7fret.brazilsouth-01.azurewebsites.net"
                   FRONTEND_APP='$(frontendAppNameProd)'
