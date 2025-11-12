@@ -1,5 +1,5 @@
 # ===========================================
-# ☕ COFFEEHUB CI/CD - QA y PRODUCCIÓN (Azure + MongoDB + SonarCloud Unificado)
+# ☕ COFFEEHUB CI/CD - QA + E2E + PRODUCCIÓN (Azure + MongoDB + SonarCloud)
 # ===========================================
 
 trigger:
@@ -46,7 +46,6 @@ stages:
 
       - script: |
           echo "🧪 Ejecutando tests del backend..."
-          echo "🔗 Usando MongoDB desde Azure Secrets..."
           npm run test:ci
         displayName: '🧪 Tests Backend'
         workingDirectory: 'coffehub/backend'
@@ -102,14 +101,14 @@ stages:
           organization: 'lucianahueda13'
           scannerMode: 'CLI'
           configMode: 'manual'
-          cliProjectKey: 'lucianahueda13_TP7-INGEIII.git'
+          cliProjectKey: 'lucianahueda13_TP7-INGEIII'
           cliProjectName: 'TP7-INGEIII'
           extraProperties: |
             sonar.sources=coffehub/backend,coffehub/frontend
             sonar.tests=coffehub/backend/tests,coffehub/frontend/api.test.js
             sonar.test.inclusions=**/*.test.js
-            sonar.exclusions=**/node_modules/**,**/coverage/**,**/*.config.js,**/*.setup.js,**/*.test.js,**/*.html,**/jest.env.js,**/jest.setup.js,coffehub/frontend/server.js,**/.env.test,**/.env.example,**/.env.local, **/*.mock.js,**/*.fixtures.js, coffehub/backend/tests/setup.js 
-            sonar.coverage.exclusions=**/*.test.js,**/coverage/**,**/*.config.js,**/*.setup.js,coffehub/backend/tests
+            sonar.exclusions=**/node_modules/**,**/coverage/**,**/*.config.js,**/*.setup.js,**/*.test.js,**/*.html,**/jest.env.js,**/jest.setup.js,**/server.js
+            sonar.coverage.exclusions=**/*.test.js,**/coverage/**,**/*.config.js,**/*.setup.js
             sonar.javascript.lcov.reportPaths=coffehub/backend/coverage/lcov.info,coffehub/frontend/coverage/lcov.info
             sonar.sourceEncoding=UTF-8
 
@@ -140,10 +139,10 @@ stages:
 
 
 # ===========================================================
-# STAGE 2: DEPLOY QA
+# STAGE 2: DEPLOY QA + TESTS E2E
 # ===========================================================
 - stage: Deploy_QA
-  displayName: "CD: Desplegar QA + Smoke Tests"
+  displayName: "CD: Desplegar QA + Tests E2E"
   dependsOn: Build_And_Test
   condition: succeeded()
   jobs:
@@ -214,25 +213,11 @@ stages:
                     --resource-group "$RG" \
                     --settings BACKEND_URL="$BACKEND_URL_VAL"
 
-            - task: AzureCLI@2
-              displayName: '⚙️ Configurar CORS en Backend QA'
-              inputs:
-                azureSubscription: '$(azureServiceConnection)'
-                scriptType: 'bash'
-                scriptLocation: 'inlineScript'
-                inlineScript: |
-                  FRONTEND_URL_VAL="https://coffeehub-front-qa-argqggbvc3g0gkdc.brazilsouth-01.azurewebsites.net"
-                  BACKEND_APP='$(backendAppNameQA)'
-                  RG='$(RESOURCE_GROUP_NAME)'
-                  az webapp cors add \
-                    --name "$BACKEND_APP" \
-                    --resource-group "$RG" \
-                    --allowed-origins "$FRONTEND_URL_VAL"
-
+            # --- Health Check ---
             - script: |
                 echo "🔍 Ejecutando Smoke Tests QA..."
-                BACKEND_URL="https://coffeehub-back-qa-argeftdrb3dkb9du.brazilsouth-01.azurewebsites.net"
-                response=$(curl -s -o /dev/null -w "%{http_code}" "$BACKEND_URL/api/health")
+                BACKEND_URL="https://coffeehub-back-qa-argeftdrb3dkb9du.brazilsouth-01.azurewebsites.net/api/health"
+                response=$(curl -s -o /dev/null -w "%{http_code}" "$BACKEND_URL")
                 if [ $response -eq 200 ]; then
                   echo "✅ Health check passed!"
                 else
@@ -240,6 +225,46 @@ stages:
                   exit 1
                 fi
               displayName: '🔍 Smoke Tests QA'
+
+            # ======================================================
+            # ☕ TESTS E2E (Playwright) sobre ambiente QA
+            # ======================================================
+            - task: NodeTool@0
+              inputs:
+                versionSpec: '20.x'
+              displayName: '📦 Instalar Node.js para E2E'
+
+            - script: |
+                echo "🚀 Instalando dependencias Playwright..."
+                npm ci
+                npx playwright install --with-deps
+              displayName: '📦 Instalar dependencias E2E'
+
+            - script: |
+                echo "🧪 Ejecutando pruebas E2E sobre QA..."
+                export FRONTEND_URL="https://coffeehub-front-qa-argqggbvc3g0gkdc.brazilsouth-01.azurewebsites.net"
+                export BACKEND_URL="https://coffeehub-back-qa-argeftdrb3dkb9du.brazilsouth-01.azurewebsites.net"
+                npx playwright test --reporter=junit,line
+              workingDirectory: 'e2e'
+              displayName: '🧪 Ejecutar Tests E2E (QA)'
+
+            - task: PublishTestResults@2
+              displayName: '📊 Publicar Resultados E2E QA'
+              condition: always()
+              inputs:
+                testResultsFormat: 'JUnit'
+                testResultsFiles: '**/results.xml'
+                searchFolder: 'e2e'
+                mergeTestResults: true
+                failTaskOnFailedTests: true
+                testRunTitle: 'Playwright E2E - QA'
+
+            - task: PublishBuildArtifacts@1
+              condition: always()
+              displayName: '📤 Subir Reporte E2E Playwright'
+              inputs:
+                pathToPublish: 'e2e/reports'
+                artifactName: 'playwright-report-QA'
 
 
 # ===========================================================
@@ -332,8 +357,8 @@ stages:
 
             - script: |
                 echo "🔍 Ejecutando Smoke Tests PROD..."
-                BACKEND_URL="https://coffeehub-back-prod-bzgaa5ekbed7fret.brazilsouth-01.azurewebsites.net"
-                response=$(curl -s -o /dev/null -w "%{http_code}" "$BACKEND_URL/api/health")
+                BACKEND_URL="https://coffeehub-back-prod-bzgaa5ekbed7fret.brazilsouth-01.azurewebsites.net/api/health"
+                response=$(curl -s -o /dev/null -w "%{http_code}" "$BACKEND_URL")
                 if [ $response -eq 200 ]; then
                   echo "✅ Health check passed!"
                 else
