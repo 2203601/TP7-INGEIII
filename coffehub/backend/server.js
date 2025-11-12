@@ -6,6 +6,7 @@ import cors from "cors";
 import { MongoClient, ObjectId } from "mongodb";
 
 const app = express();
+app.disable("x-powered-by");
 const PORT = process.env.PORT || 4000;
 
 // ================================
