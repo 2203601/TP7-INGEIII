@@ -239,9 +239,11 @@ stages:
                 npm ci
                 npx playwright install --with-deps
               displayName: '📦 Instalar dependencias E2E'
+              workingDirectory: 'e2e'
 
             - script: |
                 echo "🧪 Ejecutando pruebas E2E sobre QA..."
+                export CI=true
                 export FRONTEND_URL="https://coffeehub-front-qa-argqggbvc3g0gkdc.brazilsouth-01.azurewebsites.net"
                 export BACKEND_URL="https://coffeehub-back-qa-argeftdrb3dkb9du.brazilsouth-01.azurewebsites.net"
                 npx playwright test --reporter=junit,line
