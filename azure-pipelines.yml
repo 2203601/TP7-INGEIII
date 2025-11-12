@@ -46,9 +46,12 @@ stages:
 
       - script: |
           echo "🧪 Ejecutando tests del backend..."
+          echo "🔗 Usando MongoDB desde Azure Secrets..."
           npm run test:ci
         displayName: '🧪 Tests Backend'
         workingDirectory: 'coffehub/backend'
+        env:
+          MONGODB_URI: $(MONGODB_URI_TEST)
         continueOnError: false
 
       # ===============================
@@ -105,8 +108,8 @@ stages:
             sonar.sources=coffehub/backend,coffehub/frontend
             sonar.tests=coffehub/backend/tests,coffehub/frontend/api.test.js
             sonar.test.inclusions=**/*.test.js
-            sonar.exclusions=**/node_modules/**,**/coverage/**,**/*.config.js,**/*.setup.js,**/*.test.js,**/*.html,**/jest.env.js,**/jest.setup.js,coffehub/frontend/server.js
-            sonar.coverage.exclusions=**/*.test.js,**/coverage/**,**/*.config.js,**/*.setup.js, coffehub/backend/tests
+            sonar.exclusions=**/node_modules/**,**/coverage/**,**/*.config.js,**/*.setup.js,**/*.test.js,**/*.html,**/jest.env.js,**/jest.setup.js,coffehub/frontend/server.js,**/.env.test,**/.env.example,**/.env.local
+            sonar.coverage.exclusions=**/*.test.js,**/coverage/**,**/*.config.js,**/*.setup.js,coffehub/backend/tests
             sonar.javascript.lcov.reportPaths=coffehub/backend/coverage/lcov.info,coffehub/frontend/coverage/lcov.info
             sonar.sourceEncoding=UTF-8
 
