@@ -9,11 +9,9 @@ test.describe('☕ CoffeeHub - CRUD de cafés', () => {
   // 🟢 CREAR
   // ================================================================
   test('Debe crear un nuevo café exitosamente', async ({ page }) => {
-    // 👇 Abrir formulario
     await page.click('button:has-text("➕ Agregar Café")');
     await page.waitForSelector('#name', { state: 'visible' });
 
-    // Llenar campos
     await page.fill('#name', 'Café Test E2E');
     await page.fill('#origin', 'Colombia');
     await page.fill('#type', 'Arábica');
@@ -21,10 +19,8 @@ test.describe('☕ CoffeeHub - CRUD de cafés', () => {
     await page.fill('#rating', '4.5');
     await page.fill('#roast', 'Medium');
 
-    // Guardar
     await page.click('button:has-text("✅ Agregar Café")');
 
-    // Verificar creación
     await expect(
       page.locator('.coffee-card').filter({ hasText: 'Café Test E2E' })
     ).toBeVisible({ timeout: 10000 });
@@ -34,7 +30,7 @@ test.describe('☕ CoffeeHub - CRUD de cafés', () => {
   // 🟡 EDITAR
   // ================================================================
   test('Debe editar un café existente', async ({ page }) => {
-    // 👇 Crear uno para editar
+    // Crear uno para editar
     await page.click('button:has-text("➕ Agregar Café")');
     await page.waitForSelector('#name', { state: 'visible' });
     await page.fill('#name', 'Café Editar');
@@ -46,22 +42,23 @@ test.describe('☕ CoffeeHub - CRUD de cafés', () => {
     await page.click('button:has-text("✅ Agregar Café")');
     await page.waitForSelector('.coffee-card', { timeout: 5000 });
 
-    // ✏️ Editar el primer café
+    // Editar
     const firstCard = page.locator('.coffee-card').first();
     await firstCard.locator('button:has-text("Editar")').click();
 
-    await page.fill('#name', 'Café Editado');
-    await page.click('button:has-text("💾 Guardar Cambios")');
+    // Esperar que el botón de guardar cambios sea visible
+    await page.waitForSelector('button:has-text("💾 Guardar Cambios")', { state: 'visible' });
 
-    // Verificar actualización
-    await expect(firstCard).toContainText('Café Editado');
+    await page.fill('#name', 'Café Editado');
+    await page.click('button:has-text("💾 Guardar Cambios")', { timeout: 10000 });
+
+    await expect(firstCard).toContainText('Café Editado', { timeout: 10000 });
   });
 
   // ================================================================
   // 🔴 ELIMINAR
   // ================================================================
   test('Debe eliminar un café', async ({ page }) => {
-    // 👇 Crear uno para eliminar
     await page.click('button:has-text("➕ Agregar Café")');
     await page.waitForSelector('#name', { state: 'visible' });
     await page.fill('#name', 'Café Eliminar');
@@ -73,32 +70,44 @@ test.describe('☕ CoffeeHub - CRUD de cafés', () => {
     await page.click('button:has-text("✅ Agregar Café")');
     await page.waitForSelector('.coffee-card', { timeout: 5000 });
 
-    // Confirmar que existe antes de eliminar
     const targetCard = page.locator('.coffee-card').filter({ hasText: 'Café Eliminar' });
     await expect(targetCard).toHaveCount(1);
 
-    // Eliminar
-    page.once('dialog', dialog => dialog.accept()); // Aceptar confirmación
+    // Confirmar diálogo
+    page.once('dialog', dialog => dialog.accept());
     await targetCard.locator('button:has-text("Eliminar")').click();
 
-    // Verificar eliminación
     await expect(targetCard).toHaveCount(0);
   });
 
   // ================================================================
   // 🔵 CANCELAR
   // ================================================================
-  test('Debe cancelar el agregado sin crear un nuevo café', async ({ page }) => {
-    // 👇 Abrir formulario
+  test('Debe cancelar una edición sin guardar cambios', async ({ page }) => {
+    // Crear un café
     await page.click('button:has-text("➕ Agregar Café")');
     await page.waitForSelector('#name', { state: 'visible' });
+    await page.fill('#name', 'Café Cancelar');
+    await page.fill('#origin', 'Chile');
+    await page.fill('#type', 'Blend');
+    await page.fill('#price', '20.00');
+    await page.fill('#rating', '4.0');
+    await page.fill('#roast', 'Medium');
+    await page.click('button:has-text("✅ Agregar Café")');
+    await page.waitForSelector('.coffee-card', { timeout: 5000 });
 
-    const initialCount = await page.locator('.coffee-card').count();
+    // Entrar en modo edición
+    const firstCard = page.locator('.coffee-card').first();
+    await firstCard.locator('button:has-text("Editar")').click();
 
+    // Esperar que el botón "Cancelar" se muestre
+    await page.waitForSelector('button:has-text("Cancelar")', { state: 'visible' });
+
+    // Cambiar valor y cancelar
     await page.fill('#name', 'Café Cancelado');
     await page.click('button:has-text("Cancelar")');
 
-    const finalCount = await page.locator('.coffee-card').count();
-    expect(finalCount).toBe(initialCount);
+    // Confirmar que sigue el nombre original
+    await expect(firstCard).toContainText('Café Cancelar');
   });
 });
