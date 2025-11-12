@@ -52,9 +52,10 @@ export default defineConfig({
 
   // Servidor local (opcional, si quieres que Playwright levante el frontend)
   webServer: {
-    command: 'npm run start:frontend',
+    command: 'npm start',
     url: 'http://localhost:8080',
     reuseExistingServer: !process.env.CI,
     timeout: 120000,
   },
+  
 });
