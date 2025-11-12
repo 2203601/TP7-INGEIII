@@ -9,10 +9,12 @@ test.describe('☕ CoffeeHub - CRUD de cafés', () => {
   // 🟢 CREAR
   // ================================================================
   test('Debe crear un nuevo café exitosamente', async ({ page }) => {
+    const uniqueName = `Café Test E2E ${Date.now()}`;
+
     await page.click('button:has-text("➕ Agregar Café")');
     await page.waitForSelector('#name', { state: 'visible' });
 
-    await page.fill('#name', 'Café Test E2E');
+    await page.fill('#name', uniqueName);
     await page.fill('#origin', 'Colombia');
     await page.fill('#type', 'Arábica');
     await page.fill('#price', '25.99');
@@ -22,7 +24,7 @@ test.describe('☕ CoffeeHub - CRUD de cafés', () => {
     await page.click('button:has-text("✅ Agregar Café")');
 
     await expect(
-      page.locator('.coffee-card').filter({ hasText: 'Café Test E2E' })
+      page.locator('.coffee-card').filter({ hasText: uniqueName })
     ).toBeVisible({ timeout: 10000 });
   });
 
@@ -30,10 +32,12 @@ test.describe('☕ CoffeeHub - CRUD de cafés', () => {
   // 🟡 EDITAR
   // ================================================================
   test('Debe editar un café existente', async ({ page }) => {
+    const uniqueName = `Café Edición ${Date.now()}`;
+
     // Crear uno para editar
     await page.click('button:has-text("➕ Agregar Café")');
     await page.waitForSelector('#name', { state: 'visible' });
-    await page.fill('#name', 'Café Edición');
+    await page.fill('#name', uniqueName);
     await page.fill('#origin', 'Brasil');
     await page.fill('#type', 'Robusta');
     await page.fill('#price', '19.99');
@@ -42,17 +46,21 @@ test.describe('☕ CoffeeHub - CRUD de cafés', () => {
     await page.click('button:has-text("✅ Agregar Café")');
     await page.waitForSelector('.coffee-card', { timeout: 5000 });
 
-    const firstCard = page.locator('.coffee-card').filter({ hasText: 'Café Edición' });
-    await firstCard.locator('button:has-text("Editar")').click();
+    const card = page.locator('.coffee-card').filter({ hasText: uniqueName });
+    await card.first().locator('button:has-text("Editar")').click();
 
-    // Esperar a que el formulario y el botón sean visibles
-    await page.waitForSelector('button:has-text("💾 Guardar Cambios")', { state: 'visible', timeout: 10000 });
-    await page.waitForTimeout(500); // 🕐 Delay adicional para entornos lentos (Azure QA)
+    // Esperar a que el formulario esté visible y estable
+    await page.waitForSelector('button:has-text("💾 Guardar Cambios")', {
+      state: 'visible',
+      timeout: 10000
+    });
+    await page.waitForTimeout(500); // 🕐 pequeño delay por animación
 
-    await page.fill('#name', 'Café Editado Final');
+    const updatedName = `${uniqueName} Modificado`;
+    await page.fill('#name', updatedName);
     await page.click('button:has-text("💾 Guardar Cambios")', { timeout: 10000 });
 
-    await expect(page.locator('.coffee-card').filter({ hasText: 'Café Editado Final' }))
+    await expect(page.locator('.coffee-card').filter({ hasText: updatedName }))
       .toBeVisible({ timeout: 10000 });
   });
 
@@ -60,9 +68,11 @@ test.describe('☕ CoffeeHub - CRUD de cafés', () => {
   // 🔴 ELIMINAR
   // ================================================================
   test('Debe eliminar un café', async ({ page }) => {
+    const uniqueName = `Café Eliminar ${Date.now()}`;
+
     await page.click('button:has-text("➕ Agregar Café")');
     await page.waitForSelector('#name', { state: 'visible' });
-    await page.fill('#name', 'Café Eliminar');
+    await page.fill('#name', uniqueName);
     await page.fill('#origin', 'Perú');
     await page.fill('#type', 'Blend');
     await page.fill('#price', '22.50');
@@ -71,11 +81,12 @@ test.describe('☕ CoffeeHub - CRUD de cafés', () => {
     await page.click('button:has-text("✅ Agregar Café")');
     await page.waitForSelector('.coffee-card', { timeout: 5000 });
 
-    const targetCard = page.locator('.coffee-card').filter({ hasText: 'Café Eliminar' });
+    const targetCard = page.locator('.coffee-card').filter({ hasText: uniqueName });
     await expect(targetCard).toHaveCount(1);
 
+    // Confirmar diálogo
     page.once('dialog', dialog => dialog.accept());
-    await targetCard.locator('button:has-text("Eliminar")').click();
+    await targetCard.first().locator('button:has-text("Eliminar")').click();
 
     await expect(targetCard).toHaveCount(0);
   });
@@ -84,10 +95,12 @@ test.describe('☕ CoffeeHub - CRUD de cafés', () => {
   // 🔵 CANCELAR
   // ================================================================
   test('Debe cancelar una edición sin guardar cambios', async ({ page }) => {
-    // Crear uno propio
+    const uniqueName = `Café Cancelar ${Date.now()}`;
+
+    // Crear un café único
     await page.click('button:has-text("➕ Agregar Café")');
     await page.waitForSelector('#name', { state: 'visible' });
-    await page.fill('#name', 'Café Cancelar');
+    await page.fill('#name', uniqueName);
     await page.fill('#origin', 'Chile');
     await page.fill('#type', 'Blend');
     await page.fill('#price', '20.00');
@@ -96,17 +109,18 @@ test.describe('☕ CoffeeHub - CRUD de cafés', () => {
     await page.click('button:has-text("✅ Agregar Café")');
     await page.waitForSelector('.coffee-card', { timeout: 5000 });
 
-    const card = page.locator('.coffee-card').filter({ hasText: 'Café Cancelar' });
+    const card = page.locator('.coffee-card').filter({ hasText: uniqueName }).first();
     await card.locator('button:has-text("Editar")').click();
 
-    // Esperar que aparezca el botón cancelar
+    // Esperar que aparezca el botón Cancelar
     await page.waitForSelector('button:has-text("Cancelar")', { state: 'visible' });
     await page.waitForTimeout(500);
 
-    await page.fill('#name', 'Café Cancelado');
+    const modifiedName = `${uniqueName} Editado`;
+    await page.fill('#name', modifiedName);
     await page.click('button:has-text("Cancelar")');
 
-    // Revalidar texto original
-    await expect(card).toContainText('Café Cancelar', { timeout: 10000 });
+    // Confirmar que el nombre original se mantiene
+    await expect(card).toContainText(uniqueName, { timeout: 10000 });
   });
 });
