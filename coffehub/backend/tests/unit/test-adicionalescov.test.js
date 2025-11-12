@@ -37,15 +37,22 @@ describe('🎯 Tests para Líneas Sin Cobertura', () => {
         .get(`/api/products/${id}`)
         .expect(200);
 
+      // ✅ ASSERTIONS AGREGADAS
+      expect(response.body).toBeDefined();
       expect(response.body._id).toBe(id);
       expect(response.body.name).toBe('Test GET ID');
+      expect(response.body.price).toBe(10);
     });
 
     it('❌ Debe retornar 404 (línea 232-233)', async () => {
       const fakeId = new ObjectId();
-      await request(app)
+      const response = await request(app)
         .get(`/api/products/${fakeId}`)
         .expect(404);
+
+      // ✅ ASSERTION AGREGADA
+      expect(response.body).toBeDefined();
+      expect(response.body.message || response.body.error).toBeDefined();
     });
   });
 
@@ -66,23 +73,34 @@ describe('🎯 Tests para Líneas Sin Cobertura', () => {
         .send({ name: 'Actualizado', price: 20 })
         .expect(200);
 
+      // ✅ ASSERTIONS MEJORADAS
+      expect(response.body).toBeDefined();
       expect(response.body.message).toBe('Producto actualizado exitosamente');
       expect(response.body).toHaveProperty('updatedAt');
+      expect(response.body.updatedAt).toBeTruthy();
     });
 
     it('❌ Debe rechazar ID inválido (línea 286-287)', async () => {
-      await request(app)
+      const response = await request(app)
         .put('/api/products/invalid')
         .send({ name: 'Test' })
         .expect(400);
+
+      // ✅ ASSERTION AGREGADA
+      expect(response.body).toBeDefined();
+      expect(response.body.error || response.body.message).toBeDefined();
     });
 
     it('❌ Debe retornar 404 si no existe (línea 313-314)', async () => {
       const fakeId = new ObjectId();
-      await request(app)
+      const response = await request(app)
         .put(`/api/products/${fakeId}`)
         .send({ name: 'Test', price: 10 })
         .expect(404);
+
+      // ✅ ASSERTION AGREGADA
+      expect(response.body).toBeDefined();
+      expect(response.body.message || response.body.error).toBeTruthy();
     });
 
     it('❌ Debe validar precio negativo (línea 295-299)', async () => {
@@ -92,10 +110,15 @@ describe('🎯 Tests para Líneas Sin Cobertura', () => {
 
       testProductIds.push(new ObjectId(created.body._id));
 
-      await request(app)
+      const response = await request(app)
         .put(`/api/products/${created.body._id}`)
         .send({ price: -10 })
         .expect(400);
+
+      // ✅ ASSERTION AGREGADA
+      expect(response.body).toBeDefined();
+      expect(response.body.error).toBeDefined();
+      expect(response.body.error).toContain('precio');
     });
   });
 
@@ -112,21 +135,32 @@ describe('🎯 Tests para Líneas Sin Cobertura', () => {
         .delete(`/api/products/${created.body._id}`)
         .expect(200);
 
+      // ✅ ASSERTIONS MEJORADAS
+      expect(response.body).toBeDefined();
       expect(response.body.message).toBe('Producto eliminado exitosamente');
       expect(response.body.deletedId).toBe(created.body._id);
+      expect(response.body.deletedId).toBeTruthy();
     });
 
     it('❌ Debe rechazar ID inválido (línea 333-334)', async () => {
-      await request(app)
+      const response = await request(app)
         .delete('/api/products/invalid')
         .expect(400);
+
+      // ✅ ASSERTION AGREGADA
+      expect(response.body).toBeDefined();
+      expect(response.body.error || response.body.message).toBeDefined();
     });
 
     it('❌ Debe retornar 404 si no existe (línea 339-340)', async () => {
       const fakeId = new ObjectId();
-      await request(app)
+      const response = await request(app)
         .delete(`/api/products/${fakeId}`)
         .expect(404);
+
+      // ✅ ASSERTION AGREGADA
+      expect(response.body).toBeDefined();
+      expect(response.body.message || response.body.error).toBeTruthy();
     });
   });
 
@@ -144,16 +178,24 @@ describe('🎯 Tests para Líneas Sin Cobertura', () => {
   // ===========================================
   describe('CORS - Líneas 185-186', () => {
     it('✅ Debe permitir origen válido (línea 182-183)', async () => {
-      await request(app)
+      const response = await request(app)
         .get('/api/health')
         .set('Origin', 'http://localhost:8080')
         .expect(200);
+
+      // ✅ ASSERTION AGREGADA
+      expect(response.body).toBeDefined();
+      expect(response.body.status || response.text).toBeTruthy();
     });
 
     it('✅ Debe permitir request sin origin (línea 181)', async () => {
-      await request(app)
+      const response = await request(app)
         .get('/api/health')
         .expect(200);
+
+      // ✅ ASSERTION AGREGADA
+      expect(response.body).toBeDefined();
+      expect(response.body.status || response.text).toBeTruthy();
     });
 
     // NOTA: Las líneas 185-186 (CORS bloqueado) son difíciles de testear
@@ -181,9 +223,14 @@ describe('🎯 Tests para Líneas Sin Cobertura', () => {
 
       testProductIds.push(new ObjectId(res.body._id));
       
+      // ✅ ASSERTIONS MEJORADAS
+      expect(res.body).toBeDefined();
       expect(res.body).toHaveProperty('_id');
+      expect(res.body._id).toBeTruthy();
       expect(res.body).toHaveProperty('createdAt');
+      expect(res.body.createdAt).toBeTruthy();
       expect(res.body.name).toBe('Test Completo');
+      expect(res.body.price).toBe(15.99);
     });
 
     it('✅ Debe usar valores por defecto (línea 261-267)', async () => {
@@ -194,11 +241,14 @@ describe('🎯 Tests para Líneas Sin Cobertura', () => {
 
       testProductIds.push(new ObjectId(res.body._id));
       
+      // ✅ ASSERTIONS MEJORADAS
+      expect(res.body).toBeDefined();
       expect(res.body.origin).toBe('Desconocido');
       expect(res.body.type).toBe('Desconocido');
       expect(res.body.roast).toBe('Medium');
       expect(res.body.rating).toBe(0);
       expect(res.body.description).toBe('Sin descripción');
+      expect(res.body).toHaveProperty('_id');
     });
   });
 
@@ -223,29 +273,42 @@ describe('🎯 Tests para Líneas Sin Cobertura', () => {
         .get('/api/stats')
         .expect(200);
 
+      // ✅ ASSERTIONS MEJORADAS
+      expect(response.body).toBeDefined();
       expect(response.body).toHaveProperty('total');
       expect(response.body).toHaveProperty('avgPrice');
       expect(response.body).toHaveProperty('popularOrigin');
       expect(response.body.total).toBeGreaterThan(0);
+      expect(typeof response.body.total).toBe('number');
       
       // Verificar que avgPrice es un string con 2 decimales
       expect(typeof response.body.avgPrice).toBe('string');
       expect(response.body.avgPrice).toMatch(/^\d+\.\d{2}$/);
+      expect(parseFloat(response.body.avgPrice)).toBeGreaterThan(0);
     });
 
-    it('✅ Debe manejar caso sin productos (línea 361)', async () => {
-      // Este test asume que hay productos, pero verifica el formato
+    it('✅ Debe manejar formato correcto de estadísticas', async () => {
       const response = await request(app)
         .get('/api/stats')
         .expect(200);
 
+      // ✅ ASSERTIONS AGREGADAS
+      expect(response.body).toBeDefined();
+      expect(response.body).toHaveProperty('total');
+      expect(response.body).toHaveProperty('avgPrice');
+      expect(response.body).toHaveProperty('popularOrigin');
+      
       // Si total > 0, avgPrice debe ser string con decimales
       // Si total === 0, avgPrice debe ser 0
       if (response.body.total > 0) {
         expect(typeof response.body.avgPrice).toBe('string');
+        expect(response.body.avgPrice).toMatch(/^\d+\.\d{2}$/);
       } else {
         expect(response.body.avgPrice).toBe(0);
       }
+      
+      expect(typeof response.body.total).toBe('number');
+      expect(response.body.total).toBeGreaterThanOrEqual(0);
     });
 
     it('✅ Debe calcular popularOrigin correctamente (líneas 363-368)', async () => {
@@ -253,9 +316,12 @@ describe('🎯 Tests para Líneas Sin Cobertura', () => {
         .get('/api/stats')
         .expect(200);
 
-      // popularOrigin debe ser string o "N/A"
+      // ✅ ASSERTIONS MEJORADAS
+      expect(response.body).toBeDefined();
+      expect(response.body).toHaveProperty('popularOrigin');
       expect(typeof response.body.popularOrigin).toBe('string');
       expect(response.body.popularOrigin.length).toBeGreaterThan(0);
+      expect(response.body.popularOrigin).toBeTruthy();
     });
   });
 
@@ -270,10 +336,15 @@ describe('🎯 Tests para Líneas Sin Cobertura', () => {
 
       testProductIds.push(new ObjectId(created.body._id));
 
-      await request(app)
+      const response = await request(app)
         .put(`/api/products/${created.body._id}`)
         .send({ rating: 'invalid' })
         .expect(400);
+
+      // ✅ ASSERTION AGREGADA
+      expect(response.body).toBeDefined();
+      expect(response.body.error).toBeDefined();
+      expect(response.body.error).toContain('rating');
     });
 
     it('❌ Debe validar rating < 0 en actualización', async () => {
@@ -283,10 +354,15 @@ describe('🎯 Tests para Líneas Sin Cobertura', () => {
 
       testProductIds.push(new ObjectId(created.body._id));
 
-      await request(app)
+      const response = await request(app)
         .put(`/api/products/${created.body._id}`)
         .send({ rating: -1 })
         .expect(400);
+
+      // ✅ ASSERTION AGREGADA
+      expect(response.body).toBeDefined();
+      expect(response.body.error).toBeDefined();
+      expect(response.body.error).toContain('rating');
     });
 
     it('❌ Debe validar rating > 5 en actualización', async () => {
@@ -296,10 +372,15 @@ describe('🎯 Tests para Líneas Sin Cobertura', () => {
 
       testProductIds.push(new ObjectId(created.body._id));
 
-      await request(app)
+      const response = await request(app)
         .put(`/api/products/${created.body._id}`)
         .send({ rating: 6 })
         .expect(400);
+
+      // ✅ ASSERTION AGREGADA
+      expect(response.body).toBeDefined();
+      expect(response.body.error).toBeDefined();
+      expect(response.body.error).toContain('rating');
     });
 
     it('❌ Debe validar precio muy alto en actualización', async () => {
@@ -309,10 +390,15 @@ describe('🎯 Tests para Líneas Sin Cobertura', () => {
 
       testProductIds.push(new ObjectId(created.body._id));
 
-      await request(app)
+      const response = await request(app)
         .put(`/api/products/${created.body._id}`)
         .send({ price: 1000000 })
         .expect(400);
+
+      // ✅ ASSERTION AGREGADA
+      expect(response.body).toBeDefined();
+      expect(response.body.error).toBeDefined();
+      expect(response.body.error).toContain('precio');
     });
   });
 
