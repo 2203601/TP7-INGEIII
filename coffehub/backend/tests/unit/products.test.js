@@ -1,6 +1,9 @@
+// ============================================
+// tests/unit/products.test.js - ACTUALIZADO
+// ============================================
 import { describe, it, expect, beforeAll, afterAll } from '@jest/globals';
 import request from 'supertest';
-import app, { initializeApp, mongoClient } from '../../server.js';
+import app, { initializeApp, getMongoClient } from '../../server.js';
 
 describe('🧪 Tests Unitarios - CoffeeHub API', () => {
   
@@ -16,6 +19,7 @@ describe('🧪 Tests Unitarios - CoffeeHub API', () => {
 
   afterAll(async () => {
     try {
+      const mongoClient = getMongoClient(); // ✅ Usar getter
       if (mongoClient) {
         await mongoClient.close();
         console.log('✅ Conexión de MongoDB cerrada');

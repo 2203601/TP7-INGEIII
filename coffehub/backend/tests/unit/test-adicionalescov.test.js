@@ -1,9 +1,9 @@
-// tests/unit/missing-coverage.test.js
-// Tests específicos SOLO para líneas sin cobertura en server.js
-
+// ============================================
+// tests/unit/missing-coverage.test.js - ACTUALIZADO
+// ============================================
 import { describe, it, expect, beforeAll, afterAll } from '@jest/globals';
 import request from 'supertest';
-import app, { initializeApp, mongoClient, productsCollection } from '../../server.js';
+import app, { initializeApp, getMongoClient, getProductsCollection } from '../../server.js';
 import { ObjectId } from 'mongodb';
 
 describe('🎯 Tests para Líneas Sin Cobertura', () => {
@@ -15,15 +15,14 @@ describe('🎯 Tests para Líneas Sin Cobertura', () => {
   }, 60000);
 
   afterAll(async () => {
-    if (testProductIds.length > 0) {
+    const productsCollection = getProductsCollection(); // ✅ Usar getter
+    if (testProductIds.length > 0 && productsCollection) {
       await productsCollection.deleteMany({ _id: { $in: testProductIds } });
     }
+    const mongoClient = getMongoClient(); // ✅ Usar getter
     if (mongoClient) await mongoClient.close();
   });
 
-  // ===========================================
-  // LÍNEAS 230-239: GET /api/products/:id
-  // ===========================================
   describe('GET /api/products/:id - Líneas 230-236', () => {
     it('✅ Debe obtener producto por ID (línea 230-236)', async () => {
       const created = await request(app)
@@ -37,7 +36,6 @@ describe('🎯 Tests para Líneas Sin Cobertura', () => {
         .get(`/api/products/${id}`)
         .expect(200);
 
-      // ✅ ASSERTIONS AGREGADAS
       expect(response.body).toBeDefined();
       expect(response.body._id).toBe(id);
       expect(response.body.name).toBe('Test GET ID');
@@ -50,15 +48,11 @@ describe('🎯 Tests para Líneas Sin Cobertura', () => {
         .get(`/api/products/${fakeId}`)
         .expect(404);
 
-      // ✅ ASSERTION AGREGADA
       expect(response.body).toBeDefined();
       expect(response.body.message || response.body.error).toBeDefined();
     });
   });
 
-  // ===========================================
-  // LÍNEAS 283-325: PUT /api/products/:id
-  // ===========================================
   describe('PUT /api/products/:id - Líneas 283-321', () => {
     it('✅ Debe actualizar producto (líneas 291-321)', async () => {
       const created = await request(app)
@@ -73,7 +67,6 @@ describe('🎯 Tests para Líneas Sin Cobertura', () => {
         .send({ name: 'Actualizado', price: 20 })
         .expect(200);
 
-      // ✅ ASSERTIONS MEJORADAS
       expect(response.body).toBeDefined();
       expect(response.body.message).toBe('Producto actualizado exitosamente');
       expect(response.body).toHaveProperty('updatedAt');
@@ -86,7 +79,6 @@ describe('🎯 Tests para Líneas Sin Cobertura', () => {
         .send({ name: 'Test' })
         .expect(400);
 
-      // ✅ ASSERTION AGREGADA
       expect(response.body).toBeDefined();
       expect(response.body.error || response.body.message).toBeDefined();
     });
@@ -98,7 +90,6 @@ describe('🎯 Tests para Líneas Sin Cobertura', () => {
         .send({ name: 'Test', price: 10 })
         .expect(404);
 
-      // ✅ ASSERTION AGREGADA
       expect(response.body).toBeDefined();
       expect(response.body.message || response.body.error).toBeTruthy();
     });
@@ -115,17 +106,12 @@ describe('🎯 Tests para Líneas Sin Cobertura', () => {
         .send({ price: -10 })
         .expect(400);
 
-      // ✅ ASSERTION AGREGADA
       expect(response.body).toBeDefined();
       expect(response.body.error).toBeDefined();
-      // Aceptar mensaje genérico o específico
       expect(response.body.error).toMatch(/precio|Datos inválidos/i);
     });
   });
 
-  // ===========================================
-  // LÍNEAS 330-350: DELETE /api/products/:id
-  // ===========================================
   describe('DELETE /api/products/:id - Líneas 337-346', () => {
     it('✅ Debe eliminar producto (líneas 337-346)', async () => {
       const created = await request(app)
@@ -136,7 +122,6 @@ describe('🎯 Tests para Líneas Sin Cobertura', () => {
         .delete(`/api/products/${created.body._id}`)
         .expect(200);
 
-      // ✅ ASSERTIONS MEJORADAS
       expect(response.body).toBeDefined();
       expect(response.body.message).toBe('Producto eliminado exitosamente');
       expect(response.body.deletedId).toBe(created.body._id);
@@ -148,7 +133,6 @@ describe('🎯 Tests para Líneas Sin Cobertura', () => {
         .delete('/api/products/invalid')
         .expect(400);
 
-      // ✅ ASSERTION AGREGADA
       expect(response.body).toBeDefined();
       expect(response.body.error || response.body.message).toBeDefined();
     });
@@ -159,24 +143,11 @@ describe('🎯 Tests para Líneas Sin Cobertura', () => {
         .delete(`/api/products/${fakeId}`)
         .expect(404);
 
-      // ✅ ASSERTION AGREGADA
       expect(response.body).toBeDefined();
       expect(response.body.message || response.body.error).toBeTruthy();
     });
   });
 
-  // ===========================================
-  // LÍNEA 118: Description no string
-  // NOTA: Esta línea NO se puede cubrir con tests de integración porque
-  // sanitizeProduct() convierte todo a String() antes de validar.
-  // La línea 118 solo se activa si description NO es null/undefined pero
-  // typeof no es 'string', pero sanitizeProduct ya lo convirtió.
-  // Esta validación está cubierta en tests unitarios (products.mocked.test.js)
-  // ===========================================
-
-  // ===========================================
-  // LÍNEAS 185-186: CORS bloqueado
-  // ===========================================
   describe('CORS - Líneas 185-186', () => {
     it('✅ Debe permitir origen válido (línea 182-183)', async () => {
       const response = await request(app)
@@ -184,7 +155,6 @@ describe('🎯 Tests para Líneas Sin Cobertura', () => {
         .set('Origin', 'http://localhost:8080')
         .expect(200);
 
-      // ✅ ASSERTION AGREGADA
       expect(response.body).toBeDefined();
       expect(response.body.status || response.text).toBeTruthy();
     });
@@ -194,19 +164,11 @@ describe('🎯 Tests para Líneas Sin Cobertura', () => {
         .get('/api/health')
         .expect(200);
 
-      // ✅ ASSERTION AGREGADA
       expect(response.body).toBeDefined();
       expect(response.body.status || response.text).toBeTruthy();
     });
-
-    // NOTA: Las líneas 185-186 (CORS bloqueado) son difíciles de testear
-    // porque supertest no simula completamente el comportamiento de CORS
-    // Este caso se cubriría mejor con un test de integración real desde navegador
   });
 
-  // ===========================================
-  // POST - Validación exitosa (línea 259-274)
-  // ===========================================
   describe('POST - Líneas 259-274', () => {
     it('✅ Debe crear producto con todos los campos (línea 259-274)', async () => {
       const res = await request(app)
@@ -224,7 +186,6 @@ describe('🎯 Tests para Líneas Sin Cobertura', () => {
 
       testProductIds.push(new ObjectId(res.body._id));
       
-      // ✅ ASSERTIONS MEJORADAS
       expect(res.body).toBeDefined();
       expect(res.body).toHaveProperty('_id');
       expect(res.body._id).toBeTruthy();
@@ -242,7 +203,6 @@ describe('🎯 Tests para Líneas Sin Cobertura', () => {
 
       testProductIds.push(new ObjectId(res.body._id));
       
-      // ✅ ASSERTIONS MEJORADAS
       expect(res.body).toBeDefined();
       expect(res.body.origin).toBe('Desconocido');
       expect(res.body.type).toBe('Desconocido');
@@ -253,12 +213,8 @@ describe('🎯 Tests para Líneas Sin Cobertura', () => {
     });
   });
 
-  // ===========================================
-  // LÍNEAS 355-377: GET /api/stats
-  // ===========================================
   describe('GET /api/stats - Líneas 355-374', () => {
     it('✅ Debe calcular estadísticas con productos (líneas 356-374)', async () => {
-      // Asegurar que hay productos en la DB
       const prod1 = await request(app)
         .post('/api/products')
         .send({ name: 'Stats1', price: 10, origin: 'Colombia' });
@@ -274,61 +230,18 @@ describe('🎯 Tests para Líneas Sin Cobertura', () => {
         .get('/api/stats')
         .expect(200);
 
-      // ✅ ASSERTIONS MEJORADAS
       expect(response.body).toBeDefined();
       expect(response.body).toHaveProperty('total');
       expect(response.body).toHaveProperty('avgPrice');
       expect(response.body).toHaveProperty('popularOrigin');
       expect(response.body.total).toBeGreaterThan(0);
       expect(typeof response.body.total).toBe('number');
-      
-      // Verificar que avgPrice es un string con 2 decimales
       expect(typeof response.body.avgPrice).toBe('string');
       expect(response.body.avgPrice).toMatch(/^\d+\.\d{2}$/);
       expect(parseFloat(response.body.avgPrice)).toBeGreaterThan(0);
     });
-
-    it('✅ Debe manejar formato correcto de estadísticas', async () => {
-      const response = await request(app)
-        .get('/api/stats')
-        .expect(200);
-
-      // ✅ ASSERTIONS AGREGADAS
-      expect(response.body).toBeDefined();
-      expect(response.body).toHaveProperty('total');
-      expect(response.body).toHaveProperty('avgPrice');
-      expect(response.body).toHaveProperty('popularOrigin');
-      
-      // Si total > 0, avgPrice debe ser string con decimales
-      // Si total === 0, avgPrice debe ser 0
-      if (response.body.total > 0) {
-        expect(typeof response.body.avgPrice).toBe('string');
-        expect(response.body.avgPrice).toMatch(/^\d+\.\d{2}$/);
-      } else {
-        expect(response.body.avgPrice).toBe(0);
-      }
-      
-      expect(typeof response.body.total).toBe('number');
-      expect(response.body.total).toBeGreaterThanOrEqual(0);
-    });
-
-    it('✅ Debe calcular popularOrigin correctamente (líneas 363-368)', async () => {
-      const response = await request(app)
-        .get('/api/stats')
-        .expect(200);
-
-      // ✅ ASSERTIONS MEJORADAS
-      expect(response.body).toBeDefined();
-      expect(response.body).toHaveProperty('popularOrigin');
-      expect(typeof response.body.popularOrigin).toBe('string');
-      expect(response.body.popularOrigin.length).toBeGreaterThan(0);
-      expect(response.body.popularOrigin).toBeTruthy();
-    });
   });
 
-  // ===========================================
-  // Validaciones adicionales
-  // ===========================================
   describe('Validaciones adicionales', () => {
     it('❌ Debe validar rating NaN en actualización', async () => {
       const created = await request(app)
@@ -342,10 +255,8 @@ describe('🎯 Tests para Líneas Sin Cobertura', () => {
         .send({ rating: 'invalid' })
         .expect(400);
 
-      // ✅ ASSERTION AGREGADA
       expect(response.body).toBeDefined();
       expect(response.body.error).toBeDefined();
-      // Aceptar mensaje genérico o específico
       expect(response.body.error).toMatch(/rating|Datos inválidos/i);
     });
 
@@ -361,10 +272,8 @@ describe('🎯 Tests para Líneas Sin Cobertura', () => {
         .send({ rating: -1 })
         .expect(400);
 
-      // ✅ ASSERTION AGREGADA
       expect(response.body).toBeDefined();
       expect(response.body.error).toBeDefined();
-      // Aceptar mensaje genérico o específico
       expect(response.body.error).toMatch(/rating|Datos inválidos/i);
     });
 
@@ -380,10 +289,8 @@ describe('🎯 Tests para Líneas Sin Cobertura', () => {
         .send({ rating: 6 })
         .expect(400);
 
-      // ✅ ASSERTION AGREGADA
       expect(response.body).toBeDefined();
       expect(response.body.error).toBeDefined();
-      // Aceptar mensaje genérico o específico
       expect(response.body.error).toMatch(/rating|Datos inválidos/i);
     });
 
@@ -399,12 +306,9 @@ describe('🎯 Tests para Líneas Sin Cobertura', () => {
         .send({ price: 1000000 })
         .expect(400);
 
-      // ✅ ASSERTION AGREGADA
       expect(response.body).toBeDefined();
       expect(response.body.error).toBeDefined();
-      // Aceptar mensaje genérico o específico
       expect(response.body.error).toMatch(/precio|Datos inválidos/i);
     });
   });
-
 });

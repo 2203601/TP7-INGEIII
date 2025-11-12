@@ -16,33 +16,39 @@ const MONGODB_URI = process.env.MONGODB_URI;
 
 if (!MONGODB_URI) {
   console.error("❌ ERROR: MONGODB_URI no está definida");
-  // CAMBIO 1: No salir si estamos en test
   if (process.env.NODE_ENV !== 'test') {
     process.exit(1);
   }
 }
 
-let db;
-let productsCollection;
-let mongoClient;
+// ✅ CAMBIO: Variables internas privadas (no exportadas)
+let _db;
+let _productsCollection;
+let _mongoClient;
+let _server;
+
+// ✅ CAMBIO: Getters para exportar valores de forma segura (readonly)
+export const getDb = () => _db;
+export const getProductsCollection = () => _productsCollection;
+export const getMongoClient = () => _mongoClient;
+export const getServer = () => _server;
 
 async function connectDB() {
   try {
-    mongoClient = new MongoClient(MONGODB_URI);
-    await mongoClient.connect();
+    _mongoClient = new MongoClient(MONGODB_URI);
+    await _mongoClient.connect();
     
     const dbName = new URL(MONGODB_URI).pathname.substring(1).split('?')[0];
-    db = mongoClient.db(dbName);
-    productsCollection = db.collection("products");
+    _db = _mongoClient.db(dbName);
+    _productsCollection = _db.collection("products");
     
     console.log(`✅ Conectado a MongoDB Atlas - Base de datos: ${dbName}`);
   } catch (error) {
     console.error("❌ Error conectando a MongoDB:", error);
-    // CAMBIO 2: No salir si estamos en test
     if (process.env.NODE_ENV !== 'test') {
       process.exit(1);
     }
-    throw error; // Lanzar el error para que Jest lo capture
+    throw error;
   }
 }
 
@@ -217,7 +223,7 @@ app.get("/api/health", (req, res) => {
   res.json({ 
     status: "ok", 
     timestamp: new Date().toISOString(),
-    database: db ? "connected" : "disconnected",
+    database: _db ? "connected" : "disconnected",
     environment: process.env.NODE_ENV || "development"
   });
 });
@@ -225,7 +231,7 @@ app.get("/api/health", (req, res) => {
 // GET todos los productos
 app.get("/api/products", async (req, res) => {
   try {
-    const products = await productsCollection.find({}).toArray();
+    const products = await _productsCollection.find({}).toArray();
     res.json(products);
   } catch (err) {
     console.error("Error al obtener productos:", err);
@@ -242,7 +248,7 @@ app.get("/api/products/:id", async (req, res) => {
       return res.status(400).json({ error: "ID inválido" });
     }
     
-    const product = await productsCollection.findOne({ _id: new ObjectId(id) });
+    const product = await _productsCollection.findOne({ _id: new ObjectId(id) });
     
     if (!product) {
       return res.status(404).json({ error: "Producto no encontrado" });
@@ -282,7 +288,7 @@ app.post("/api/products", async (req, res) => {
       createdAt: new Date()
     };
     
-    const result = await productsCollection.insertOne(newProduct);
+    const result = await _productsCollection.insertOne(newProduct);
     res.status(201).json({ 
       _id: result.insertedId,
       ...newProduct 
@@ -320,7 +326,7 @@ app.put("/api/products/:id", async (req, res) => {
       updatedAt: new Date()
     };
     
-    const result = await productsCollection.updateOne(
+    const result = await _productsCollection.updateOne(
       { _id: new ObjectId(id) },
       { $set: updateData }
     );
@@ -349,7 +355,7 @@ app.delete("/api/products/:id", async (req, res) => {
       return res.status(400).json({ error: "ID inválido" });
     }
     
-    const result = await productsCollection.deleteOne({ _id: new ObjectId(id) });
+    const result = await _productsCollection.deleteOne({ _id: new ObjectId(id) });
     
     if (result.deletedCount === 0) {
       return res.status(404).json({ error: "Producto no encontrado" });
@@ -368,7 +374,7 @@ app.delete("/api/products/:id", async (req, res) => {
 // GET estadísticas
 app.get("/api/stats", async (req, res) => {
   try {
-    const products = await productsCollection.find({}).toArray();
+    const products = await _productsCollection.find({}).toArray();
     
     const total = products.length;
     const avgPrice = total > 0 
@@ -396,14 +402,13 @@ app.get("/api/stats", async (req, res) => {
 // ================================
 // 🚀 Iniciar servidor
 // ================================
-let server;
 
-async function initializeApp() {
+export async function initializeApp() {
   try {
     await connectDB();
     
     if (process.env.NODE_ENV !== 'test') {
-      server = app.listen(PORT, () => {
+      _server = app.listen(PORT, () => {
         console.log(`✅ CoffeeHub Backend corriendo en puerto ${PORT}`);
         console.log('🔗 Orígenes permitidos:', allowedOrigins);
       });
@@ -417,10 +422,9 @@ async function initializeApp() {
   }
 }
 
-// CAMBIO 3: Solo auto-inicializar en producción
+// Solo auto-inicializar en producción
 if (process.env.NODE_ENV !== 'test') {
   initializeApp();
 }
 
 export default app;
-export { server, initializeApp, db, productsCollection, mongoClient };
