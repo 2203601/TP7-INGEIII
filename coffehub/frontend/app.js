@@ -105,8 +105,8 @@ export async function handleFormSubmit(event) {
     name: document.getElementById('name').value,
     origin: document.getElementById('origin').value,
     type: document.getElementById('type').value,
-    price: parseFloat(document.getElementById('price').value),
-    rating: parseFloat(document.getElementById('rating').value),
+    price: Number.parseFloat(document.getElementById('price').value),
+    rating: Number.parseFloat(document.getElementById('rating').value),
     roast: document.getElementById('roast').value,
     description: document.getElementById('description').value
   };
@@ -195,7 +195,7 @@ export async function updateStats() {
     const res = await fetch(`${getBackendURL()}/api/stats`);
     let stats;
     
-    if (res && res.ok) {
+    if (res?.ok) {
       stats = await res.json();
     } else {
       stats = { total: 0, avgPrice: '0.00', popularOrigin: 'N/A' };
