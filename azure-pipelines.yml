@@ -99,7 +99,7 @@ stages:
           organization: 'lucianahueda13'
           scannerMode: 'CLI'
           configMode: 'manual'
-          cliProjectKey: 'lucianahueda13_TP7-INGEIII'
+          cliProjectKey: 'lucianahueda13_TP7-INGEIII.git'
           cliProjectName: 'TP7-INGEIII'
           extraProperties: |
             sonar.sources=coffehub/backend,coffehub/frontend
