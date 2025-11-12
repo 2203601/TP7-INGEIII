@@ -80,9 +80,9 @@ function validatePrice(price, isUpdate) {
   if (isUpdate && price === undefined) return [];
   
   const errors = [];
-  const priceNum = parseFloat(price);
+  const priceNum = Number.parseFloat(price);
   
-  if (isNaN(priceNum)) {
+  if (Number.isNaN(priceNum)) {
     errors.push('Price must be a valid number');
   } else if (priceNum < 0) {
     errors.push('Price cannot be negative');
@@ -99,9 +99,9 @@ function validateRating(rating) {
   if (rating === undefined || rating === null) return [];
   
   const errors = [];
-  const ratingNum = parseFloat(rating);
+  const ratingNum = Number.parseFloat(rating);
   
-  if (isNaN(ratingNum)) {
+  if (Number.isNaN(ratingNum)) {
     errors.push('Rating must be a valid number');
   } else if (ratingNum < 0 || ratingNum > 5) {
     errors.push('Rating must be between 0 and 5');
@@ -167,7 +167,7 @@ function sanitizeProduct(productData) {
   }
 
   if (productData.price !== undefined) {
-    sanitized.price = parseFloat(productData.price);
+    sanitized.price = Number.parseFloat(productData.price);
   }
 
   if (productData.roast !== undefined) {
@@ -175,7 +175,7 @@ function sanitizeProduct(productData) {
   }
 
   if (productData.rating !== undefined && productData.rating !== null) {
-    sanitized.rating = parseFloat(productData.rating);
+    sanitized.rating = Number.parseFloat(productData.rating);
   }
 
   if (productData.description !== undefined) {
